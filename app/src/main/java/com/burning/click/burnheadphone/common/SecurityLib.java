@@ -158,33 +158,4 @@ public class SecurityLib {
 
     public static final String attach_url = "v0.api.upyun.com";
 
-    public static String getUpyunNode(String test) {
-//		String result = "";
-        String mded = EncryptToMD5(test);
-        int len = mded.length();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(File.separator).append(mded.substring(len - 6, len - 4))
-                .append(File.separator)
-                .append(mded.substring(len - 4, len - 2))
-                .append(File.separator)
-                .append(mded.substring(len - 2, len))
-                .append(File.separator);
-        return sb.toString().toUpperCase();
-    }
-
-    public static String getUpyunPath(String node) {
-
-        return attach_url + node;
-    }
-
-    /***
-     *将城市信息进行加密处理
-     */
-    public static int  EncryptCityCode(String cityCode){
-        if ("".equals(cityCode)){
-            return -1;
-        }
-        return EncryptToMD5(cityCode).hashCode();
-    }
 }

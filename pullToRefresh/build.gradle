@@ -9,7 +9,20 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
     }
-
+    signingConfigs {
+        debug {
+            storeFile file("/home/click/BHPhone.jks")
+            storePassword "f5192af0175d4ff7053888a092499fe5"
+            keyAlias "BHPhone"
+            keyPassword "f5192af0175d4ff7053888a092499fe5"
+        }
+        release {
+            storeFile file("/home/click/BHPhone.jks")
+            storePassword "f5192af0175d4ff7053888a092499fe5"
+            keyAlias "BHPhone"
+            keyPassword "f5192af0175d4ff7053888a092499fe5"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
