@@ -1,0 +1,10 @@
+1.**布局文件空间命名规范：**
+
+采用应用该layout的类名_该控件名_extension
+
+example: MainActivity 引用的main_layout中的一个imageview命名
+[@+id/main_image_extension]
+
+2.变量名：m功能控件名
+
+example：mGuideViewPager;

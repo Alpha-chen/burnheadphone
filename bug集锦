@@ -1,0 +1,5 @@
+bug1.
+viewPager的adapter出错：
+bug：The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count: 0,
+solve:初始化viewpager的时候应该先初始化adapter ,然后在设置setAdapter方法，如果不这样，在更新了adapter之后，就会出现改错
+ http://www.cnblogs.com/ivan240/archive/2013/07/23/3208570.html
