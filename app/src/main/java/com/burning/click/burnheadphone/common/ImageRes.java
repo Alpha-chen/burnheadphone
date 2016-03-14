@@ -9,7 +9,7 @@ public class ImageRes {
 
     public static int[] getGuidePic(){
         int [] pic= {
-            R.drawable.first,R.drawable.second
+            R.drawable.three,R.drawable.four
         };
         return pic;
     }
