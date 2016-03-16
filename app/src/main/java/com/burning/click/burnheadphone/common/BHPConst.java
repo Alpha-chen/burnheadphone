@@ -5,4 +5,5 @@ package com.burning.click.burnheadphone.common;
  */
 public class BHPConst {
 
+
 }

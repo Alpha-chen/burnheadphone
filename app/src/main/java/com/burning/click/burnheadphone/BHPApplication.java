@@ -13,7 +13,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 public class BHPApplication extends Application {
     public static BHPApplication mApplication;
     public static Context appContext;
-    private static boolean DEBUG;
+    public static boolean DEBUG = true;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,7 +33,7 @@ public class BHPApplication extends Application {
         DEBUG=isApkDebugable(mApplication);
     }
 
-    public static boolean isApkDebugable(Context context) {
+    private static boolean isApkDebugable(Context context) {
         try {
             ApplicationInfo info= context.getApplicationInfo();
             return (info.flags&ApplicationInfo.FLAG_DEBUGGABLE)!=0;

@@ -49,15 +49,18 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     Log.d(TAG,"aaaaaa");
+        if (position==mGuidePic.length-1){
+            welcomeBtn.setVisibility(View.VISIBLE);
+        }else {
+            welcomeBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onPageSelected(int position) {
         Log.d(TAG,"position="+position);
-        android.util.Log.d(TAG,"12222222222");
-            if (position==mGuidePic.length-1){
-                welcomeBtn.setVisibility(View.VISIBLE);
-            }
+        Log.d(TAG,"12222222222");
+
     }
 
     @Override
@@ -77,11 +80,6 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
                 break;
             default:
                 break;
-
-
-
-
-
         }
     }
 }

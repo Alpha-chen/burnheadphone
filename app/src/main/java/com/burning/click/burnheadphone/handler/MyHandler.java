@@ -11,19 +11,22 @@ import java.lang.ref.WeakReference;
  * Created by click on 16-3-9.
  */
 public class MyHandler extends Handler {
-        private WeakReference<Context> weakReference ;
-
-    public MyHandler(Context context){
+    private WeakReference<Context> weakReference;
+    public MyHandler(Context context) {
         weakReference = new WeakReference<>(context);
+    }
+
+    public MyHandler() {
+        super();
     }
 
     @Override
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Activity activity = (Activity) weakReference.get();
-            if (activity==null){
-                return;
-            }
+        if (activity == null) {
+            return;
+        }
 
     }
 }
