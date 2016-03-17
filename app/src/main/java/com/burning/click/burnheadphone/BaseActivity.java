@@ -40,8 +40,14 @@ public class BaseActivity extends Activity implements Handler.Callback,View.OnCl
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        KeyBoardUtil.hideKeyBoard(this);
+        KeyBoardUtil.hideKeyBoard(BaseActivity.this,getCurrentFocus());
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        KeyBoardUtil.hideKeyBoard(BaseActivity.this,getCurrentFocus());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.burning.click.burnheadphone.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 /** 打开关闭键盘
@@ -9,10 +10,10 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class KeyBoardUtil {
 
-    public static void hideKeyBoard(Activity activity){
-        if (activity.getCurrentFocus()!=null){
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+    public static void hideKeyBoard(Context context,View focus){
+        if (focus!=null){
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
     }

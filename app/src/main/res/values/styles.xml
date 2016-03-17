@@ -30,14 +30,15 @@
     </style>
     <!--自定义style-->
     <!-- 自定义buttonStyle-->
-    <style name="login_btn_style">
+    <style name="login_btn_style" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginLeft">32dp</item>
         <item name="android:layout_marginRight">32dp</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@drawable/button_selector</item>
     </style>
+
 
 
 </resources>

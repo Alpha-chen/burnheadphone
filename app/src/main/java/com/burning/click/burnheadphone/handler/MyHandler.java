@@ -20,6 +20,8 @@ public class MyHandler extends Handler {
         super();
     }
 
+
+
     @Override
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
