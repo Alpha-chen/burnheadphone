@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:orientation="vertical">
-            <ImageView
+            <com.facebook.drawee.view.DraweeView
                 android:id="@+id/login_portrait"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

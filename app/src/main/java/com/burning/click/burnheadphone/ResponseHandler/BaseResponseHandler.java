@@ -16,11 +16,11 @@ public class BaseResponseHandler extends Handler {
 
     }
 
-    protected void onSuccessMessage(Response response){
+    public void onSuccessMessage(Response response){
     }
 
 
-    protected  void onFaileMesage(Response response){
+    public  void onFaileMesage(Response response){
     }
 
 
@@ -29,8 +29,14 @@ public class BaseResponseHandler extends Handler {
      * @param what
      * @param response
      */
-    protected void sendSuccessMessage(int what , Response response){
+    public void sendSuccessMessage(int what , Response response){
 
+    }
+
+    public void sendCacheSuccessMessage(int what , Response response){
+
+    }
+    public void sendCacheFailMessage(int what , Response response){
 
     }
 
@@ -39,13 +45,14 @@ public class BaseResponseHandler extends Handler {
      * @param whar
      * @param response
      */
-    protected void sendFaileMessage(int whar, Response response){
+    public void sendFaileMessage(int whar, Response response){
 
     }
+
     /**
      * 处理错误码
      */
-    protected void handleData(Object result){
+    private void handleData(Object result){
 
 
     }
