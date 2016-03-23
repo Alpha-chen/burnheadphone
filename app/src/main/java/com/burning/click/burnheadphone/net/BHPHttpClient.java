@@ -3,8 +3,10 @@ package com.burning.click.burnheadphone.net;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 
-import com.burning.click.burnheadphone.Constant;
+import com.burning.click.burnheadphone.Log.LogUtil;
+import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.ResponseHandler.BaseResponseHandler;
 
 import java.io.IOException;
@@ -14,8 +16,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
+import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -97,6 +102,18 @@ public class BHPHttpClient {
 
     }
 
+    /**
+     * 知情求网络
+     * @param request
+     */
+    public void enque(final Request request){
+
+        if (request==null){
+            return;
+        }
+
+        addBHPTask(buildBHPTask(request,null));
+    }
     public   void enque(final Request request, final BaseResponseHandler responseHandler){
         if (request==null){
             return;
@@ -113,6 +130,7 @@ public class BHPHttpClient {
                 if (request==null&&responseHandler !=null){
                     responseHandler.sendEmptyMessage(Constant.NET_WHAT.EMPTY_MESSAGE);
                 }
+                httpRequestList.add(request);
                 Response response;
                 try {
                      response = okHttpClient.newCall(request).execute();
@@ -127,13 +145,17 @@ public class BHPHttpClient {
                     }
                     // 先读取缓存
                     if (response.isSuccessful()&&response.cacheResponse()!=null){
+                        LogUtil.d(11111111);
                         responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE,response.networkResponse());
                     }else if (response.isSuccessful()){
+                        LogUtil.d(22222222);
                             responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE,response.networkResponse());
                     }else if (!response.isSuccessful()){
                         if (response.code()==404){
+                            LogUtil.d(404);
                             responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_404);
                         }else if (response.code()==408){
+                            LogUtil.d(408);
                             responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_408);
                         }
                     }
@@ -149,11 +171,59 @@ public class BHPHttpClient {
             }finally {
                 mSemaphorePool.release();
             }
-
         }
     };
 
     }
 
+    public void cancle(final Request request){
+        if (request==null){
+            return;
+        }
+        Call call =okHttpClient.newCall(request);
+        if (!call.isCanceled()){
+            call.cancel();
+        }
+    }
+
+    /**
+     * 停止所有的请求
+     */
+    public void cancle(){
+        if (null==httpRequestList||httpRequestList.size()==0){
+            return;
+        }
+        int temp =httpRequestList.size();
+        for (int i=0;i<temp;i++){
+            Call call = okHttpClient.newCall(httpRequestList.get(i));
+            if (!call.isCanceled()){
+                call.cancel();
+            }
+        }
+    }
+
+    /**
+     * 自定义构建请求
+     */
+    public static Request getRequest(String url, RequestBody requestBody){
+        if (TextUtils.isEmpty(url)||null==requestBody){
+            return null;
+        }
+        return new Request.Builder().url(url).post(requestBody).build();
+    }
+
+    public static Request getRequest(String url){
+        if (TextUtils.isEmpty(url)){
+            return null;
+        }
+        return new Request.Builder().url(url).build();
+    }
+
+    public static Request getRequest(String url, CacheControl cacheControl){
+        if (TextUtils.isEmpty(url)||null==cacheControl){
+            return null;
+        }
+        return new Request.Builder().url(url).cacheControl(cacheControl).build();
+    }
 
 }

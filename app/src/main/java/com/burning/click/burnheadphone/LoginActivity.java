@@ -24,7 +24,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
+import com.burning.click.burnheadphone.net.BHPHttpClient;
+import com.burning.click.burnheadphone.net.build.LoginBuild;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mLogin = (Button) findViewById(R.id.login_sign_in_button);
-
+        mLogin.setOnClickListener(this);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -169,7 +172,20 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            LogUtil.d(9999999);
+            BHPHttpClient.getInstance().enque(LoginBuild.test("www.baidu.com"),new LoginResponseHandler(LoginActivity.this){
+                @Override
+                public void onSuccess(Response response) {
+                    super.onSuccess(response);
+                    LogUtil.d(TAG,"reponses="+response.body().charStream());
+                    LogUtil.d(TAG,"reponses="+response.message());
+                }
 
+                @Override
+                public void onFailure(Response response) {
+                    super.onFailure(response);
+                }
+            });
         }
     }
 

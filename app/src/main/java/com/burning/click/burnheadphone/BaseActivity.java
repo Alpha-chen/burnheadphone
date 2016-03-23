@@ -16,7 +16,7 @@ import com.burning.click.burnheadphone.util.KeyBoardUtil;
  * Created by click on 16-3-9.
  */
 public class BaseActivity extends Activity implements Handler.Callback,View.OnClickListener{
-    private String TAG="BaseActivity";
+    protected String TAG="BaseActivity";
     private MyHandler myHandler =  new MyHandler(BaseActivity.this);
 
     @Override

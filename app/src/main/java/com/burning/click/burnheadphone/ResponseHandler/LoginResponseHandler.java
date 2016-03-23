@@ -13,12 +13,21 @@ public class LoginResponseHandler extends BaseResponseHandler {
     }
 
     @Override
-    protected void onFaileMesage(Response response) {
+    public void onFaileMesage(Response response) {
         super.onFaileMesage(response);
+        if (null==response){
+            return;
+        }
+        handleData(response);
+        postFaileMessage(response);
     }
 
     @Override
-    protected void onSuccessMessage(Response response) {
+    public void onSuccessMessage(Response response) {
         super.onSuccessMessage(response);
+        if (null==response){
+            return;
+        }
+        postSuccessMessage(response);
     }
 }

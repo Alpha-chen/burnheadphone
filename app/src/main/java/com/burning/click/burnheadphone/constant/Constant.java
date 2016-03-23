@@ -1,4 +1,4 @@
-package com.burning.click.burnheadphone;
+package com.burning.click.burnheadphone.constant;
 
 /**
  * Created by click on 16-3-22.
