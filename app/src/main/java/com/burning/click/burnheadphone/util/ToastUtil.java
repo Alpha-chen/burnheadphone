@@ -49,12 +49,12 @@ public class ToastUtil {
      * @param position 位置
      */
     private static void makeText(String message ,int resId,int duration,int position){
-        Toast toast =Toast.makeText(BHPApplication.mApplication,message, LENGTH_LONG);
+        Toast toast =Toast.makeText(BHPApplication.appContext,message, LENGTH_LONG);
         if (position!=0){
             toast.setGravity(position,0,0);
         }
         LinearLayout toastView = (LinearLayout) toast.getView();
-        ImageView bg= new ImageView(BHPApplication.mApplication);
+        ImageView bg= new ImageView(BHPApplication.appContext);
         if (resId!=0){
             bg.setImageResource(resId);
         }

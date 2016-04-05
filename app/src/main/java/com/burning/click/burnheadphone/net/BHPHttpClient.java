@@ -132,6 +132,7 @@ public class BHPHttpClient {
                 }
                 httpRequestList.add(request);
                 Response response;
+                LogUtil.d(135);
                 try {
                      response = okHttpClient.newCall(request).execute();
                     if (response==null){

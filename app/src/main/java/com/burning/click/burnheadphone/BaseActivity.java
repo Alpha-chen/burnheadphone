@@ -32,7 +32,7 @@ public class BaseActivity extends Activity implements Handler.Callback,View.OnCl
     }
     protected void initView() {
     }
-
+    protected void initResponseHandler(){};
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -63,6 +63,7 @@ public class BaseActivity extends Activity implements Handler.Callback,View.OnCl
 
     @Override
     public void onClick(View v) {
+        KeyBoardUtil.hideKeyBoard(BaseActivity.this,getCurrentFocus());
 
     }
 }
