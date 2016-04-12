@@ -15,7 +15,7 @@ public class LogUtil {
     }
 
     public static void d(int num){
-        printLog("####==",num+"");
+        printLog("#####################==",num+"");
     }
 
     public static void d(String tag ,String msg){

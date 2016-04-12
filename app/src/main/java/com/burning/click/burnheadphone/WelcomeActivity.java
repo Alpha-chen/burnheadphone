@@ -75,6 +75,7 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
             case  R.id.welcome:
                 Intent intent = new Intent();
                 intent.setClass(WelcomeActivity.this,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
                 break;

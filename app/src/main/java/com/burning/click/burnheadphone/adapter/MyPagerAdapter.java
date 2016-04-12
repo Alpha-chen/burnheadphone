@@ -1,13 +1,13 @@
 package com.burning.click.burnheadphone.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.burning.click.burnheadphone.callback.MyPagerCallBack;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +68,8 @@ public class MyPagerAdapter extends PagerAdapter {
             return;
         }
         for (int i = 0; i <mGuidePic.length;i++){
-            ImageView imageView =  new ImageView(mContext);
-            imageView.setImageResource(mGuidePic[i]);
+            SimpleDraweeView imageView =  new SimpleDraweeView(mContext);
+            imageView.setImageURI(Uri.parse("res://com.burning.click.burnheadphone/"+mGuidePic[i]));
             mView.add(imageView);
         }
     }
