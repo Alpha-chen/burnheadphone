@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,35 +14,35 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
+import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.net.build.LoginBuild;
-import com.burning.click.burnheadphone.util.ToastUtil;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
  * 登陆界面
  */
 public class LoginActivity extends BaseActivity {
-
-
     // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-    private LoginResponseHandler loginResponseHandler;
-    private Button mLogin;
 
+    @Bind(R.id.email) AutoCompleteTextView mEmailView;
+    @Bind(R.id.password) EditText mPasswordView;
+    @Bind(R.id.login_progress) View mProgressView;
+    @Bind(R.id.login_form) View mLoginFormView;
+    @Bind(R.id.login_sign_in_button) Button mLogin;
+    private  LoginResponseHandler loginResponseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
+        ButterKnife.bind(this);
         initResponseHandler();
         initView();
 
@@ -50,14 +51,15 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initResponseHandler() {
         super.initResponseHandler();
-        loginResponseHandler=  new LoginResponseHandler(LoginActivity.this){
+        loginResponseHandler = new LoginResponseHandler(LoginActivity.this) {
             @Override
             public void onSuccess(Response response) {
                 super.onSuccess(response);
-                LogUtil.d(TAG,"reponses="+response.body().charStream());
-                LogUtil.d(TAG,"reponses="+response.message());
+                LogUtil.d(TAG, "reponses=" + response.message());
+                if ("OK".equals(response.message())) {
+                myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
+                }
             }
-
             @Override
             public void onFailure(Response response) {
                 super.onFailure(response);
@@ -65,35 +67,24 @@ public class LoginActivity extends BaseActivity {
         };
     }
 
+    @OnClick(R.id.login_sign_in_button)
+
     @Override
     protected void initView() {
         super.initView();
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mLogin = (Button) findViewById(R.id.login_sign_in_button);
-        mLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogUtil.d(TAG,"sdfaaaaaaaaaad");
-                attemptLogin();
-            }
-        });
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mLogin.setOnClickListener(this);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+//                    attemptLogin();
                     return true;
                 }
                 return false;
             }
         });
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mProgressView.setAlpha(0.5f);
     }
-
-
-
 
 
     /**
@@ -129,9 +120,8 @@ public class LoginActivity extends BaseActivity {
         } else {
             showProgress(true);
             LogUtil.d(9999999);
-            ToastUtil.makeText("1634");
-            Toast.makeText(LoginActivity.this,"107",Toast.LENGTH_LONG).show();
-            BHPHttpClient.getInstance().enque(LoginBuild.test("www.baidu.com"),loginResponseHandler);
+//            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/"), loginResponseHandler);
+            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
         }
     }
 
@@ -161,7 +151,6 @@ public class LoginActivity extends BaseActivity {
                     mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -178,35 +167,26 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-
-
-    public  void aaaa(){
-        LoginResponseHandler loginResponseHandler =  new LoginResponseHandler(LoginActivity.this){
-            @Override
-            public void onSuccess(Response response) {
-                super.onSuccess(response);
-            }
-
-            @Override
-            public void onFailure(Response response) {
-                super.onFailure(response);
-            }
-        };
-
+    @Override
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case Constant.WHAT.EMPTY_SUCCESS:
+                LogUtil.d(177);
+                showProgress(true);
+                break;
+            default:
+                break;
+        }
+        return super.handleMessage(msg);
     }
-
-
-
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
-            case  R.id.login_sign_in_button:
+        switch (v.getId()) {
+            case R.id.login_sign_in_button:
                 attemptLogin();
                 break;
-
-
             default:
                 break;
         }

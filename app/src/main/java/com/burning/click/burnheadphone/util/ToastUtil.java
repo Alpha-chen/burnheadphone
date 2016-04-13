@@ -1,5 +1,6 @@
 package com.burning.click.burnheadphone.util;
 
+import android.content.Context;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,8 +18,8 @@ public class ToastUtil {
      * 文字
      * @param message 内容
      */
-    public static  void makeText(String message){
-        ToastUtil.makeText(message,0,0,Gravity.CENTER);
+    public static  void makeText(Context context,String message){
+        ToastUtil.makeText(context,message,0,0,0);
     }
 
     /***
@@ -26,8 +27,8 @@ public class ToastUtil {
      * @param message
      * @param resId
      */
-    public static  void makeImaText(String message,int resId){
-        makeText(message,resId,0,Gravity.CENTER);
+    public static  void makeImaText(Context context,String message,int resId){
+        makeText(context,message,resId,0,Gravity.CENTER);
     }
 
     /**
@@ -36,8 +37,8 @@ public class ToastUtil {
      * @param resId 图片ID
      * @param duration 时长
      */
-    public static  void makeImaText(String message,int resId,int duration){
-        makeText(message,resId,duration,Gravity.CENTER);
+    public static  void makeImaText(Context context,String message,int resId,int duration){
+        makeText(context,message,resId,duration,Gravity.CENTER);
     }
 
 
@@ -48,8 +49,8 @@ public class ToastUtil {
      * @param duration 时长
      * @param position 位置
      */
-    private static void makeText(String message ,int resId,int duration,int position){
-        Toast toast =Toast.makeText(BHPApplication.appContext,message, LENGTH_LONG);
+    private static void makeText(Context context,String message , int resId, int duration, int position){
+        Toast toast =Toast.makeText(context,message, LENGTH_LONG);
         if (position!=0){
             toast.setGravity(position,0,0);
         }

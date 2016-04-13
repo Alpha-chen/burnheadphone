@@ -11,4 +11,9 @@ public interface Constant {
         int ERROR_404=UNKNOW_ERROR+1;
         int ERROR_408=ERROR_404+1;
     }
+
+    interface  WHAT{
+        int EMPTY_SUCCESS=2000;
+        int EMPTY_FAILE=EMPTY_SUCCESS+1;
+    }
 }

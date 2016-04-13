@@ -3,12 +3,13 @@ package com.burning.click.burnheadphone;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.burning.click.burnheadphone.handler.MyHandler;
+import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.util.KeyBoardUtil;
 
 /**
@@ -17,12 +18,12 @@ import com.burning.click.burnheadphone.util.KeyBoardUtil;
  */
 public class BaseActivity extends Activity implements Handler.Callback,View.OnClickListener{
     protected String TAG="BaseActivity";
-    private MyHandler myHandler =  new MyHandler(BaseActivity.this);
+    protected Handler myHandler=  new Handler(Looper.getMainLooper(),this);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-
     }
     protected void  initMethod(){
 
@@ -58,12 +59,12 @@ public class BaseActivity extends Activity implements Handler.Callback,View.OnCl
 
     @Override
     public boolean handleMessage(Message msg) {
-        return false;
+        LogUtil.d(62);
+        return true;
     }
 
     @Override
     public void onClick(View v) {
         KeyBoardUtil.hideKeyBoard(BaseActivity.this,getCurrentFocus());
-
     }
 }
