@@ -10,56 +10,87 @@ import android.widget.Button;
 
 import com.burning.click.burnheadphone.adapter.MyPagerAdapter;
 import com.burning.click.burnheadphone.common.ImageRes;
+import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.SpkeyName;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.support.v4.view.ViewPager.OnPageChangeListener;
 
 /**
  * 引导页
  */
-public class WelcomeActivity extends BaseActivity implements OnPageChangeListener{
-    private String TAG="WelcomeActivity";
-    private ViewPager mGuideViewPager;
+public class WelcomeActivity extends BaseActivity implements OnPageChangeListener {
+    private String TAG = "WelcomeActivity";
+    @Bind(R.id.guide_vp)
+    ViewPager mGuideViewPager;
     private MyPagerAdapter myPagerAdapter;
-    private int [] mGuidePic;
-    private Button welcomeBtn;
+    private int[] mGuidePic;
+    @Bind(R.id.welcome)
+    Button welcomeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
+        ButterKnife.bind(this);
+        checkStatus();
         initViewData();
         initView();
+    }
+
+    private void checkStatus() {
+        if (!SpUtils.getBoolean(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.IS_FIRST, true)) {
+            if (0 == SpUtils.getInt(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.LOGIN_STATUS, 0)) {
+                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(WelcomeActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
+            }
+        }
     }
 
     @Override
     protected void initView() {
         super.initView();
-        mGuideViewPager = (ViewPager) findViewById(R.id.guide_vp);
         mGuidePic = ImageRes.getGuidePic();
-        myPagerAdapter =  new MyPagerAdapter(WelcomeActivity.this);
+        myPagerAdapter = new MyPagerAdapter(WelcomeActivity.this);
         myPagerAdapter.setmGuidePic(mGuidePic);
         mGuideViewPager.setAdapter(myPagerAdapter);
         mGuideViewPager.addOnPageChangeListener(this);
-        welcomeBtn = (Button) findViewById(R.id.welcome);
         welcomeBtn.setVisibility(View.GONE);
-        welcomeBtn.setOnClickListener(this);
+    }
+
+
+    @OnClick(R.id.welcome)
+    void welcome() {
+        Intent intent = new Intent();
+        intent.setClass(WelcomeActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        SpUtils.putBoolean(WelcomeActivity.this,SpUtils.BHP_SHARF,SpkeyName.IS_FIRST,false);
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    Log.d(TAG,"aaaaaa");
-        if (position==mGuidePic.length-1){
+        Log.d(TAG, "position=" + position);
+//        float percent =(positionOffsetPixels+1)/ScreenUtil.getScreenPixels(WelcomeActivity.this)[0];
+//        LogUtil.d("percent",percent+"");
+//        welcomeBtn.setAlpha(percent);
+        if (position == mGuidePic.length - 1) {
             welcomeBtn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             welcomeBtn.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onPageSelected(int position) {
-        Log.d(TAG,"position="+position);
-        Log.d(TAG,"12222222222");
 
     }
 
@@ -68,19 +99,5 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
 
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        switch (v.getId()){
-            case  R.id.welcome:
-                Intent intent = new Intent();
-                intent.setClass(WelcomeActivity.this,LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-                break;
-            default:
-                break;
-        }
-    }
+
 }

@@ -12,6 +12,8 @@ import android.view.View;
 import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.util.KeyBoardUtil;
 
+import butterknife.ButterKnife;
+
 /**
  * 基类
  * Created by click on 16-3-9.
@@ -24,6 +26,7 @@ public class BaseActivity extends Activity implements Handler.Callback,View.OnCl
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+
     }
     protected void  initMethod(){
 

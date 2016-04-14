@@ -1,5 +1,6 @@
 package com.burning.click.burnheadphone;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -17,7 +18,10 @@ import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.net.build.LoginBuild;
+import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.ProgressUtil;
+import com.burning.click.burnheadphone.util.SpkeyName;
+import com.burning.click.burnheadphone.util.ToastUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -148,6 +152,11 @@ public class LoginActivity extends BaseActivity {
             case Constant.WHAT.EMPTY_SUCCESS:
                 LogUtil.d(177);
                 ProgressUtil.showProgress(mProgressView, false);
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                SpUtils.putInt(LoginActivity.this,SpUtils.BHP_SHARF, SpkeyName.LOGIN_STATUS,1);// 已经登陆
                 break;
             default:
                 break;

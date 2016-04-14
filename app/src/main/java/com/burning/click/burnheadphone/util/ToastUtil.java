@@ -2,11 +2,10 @@ package com.burning.click.burnheadphone.util;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.burning.click.burnheadphone.BHPApplication;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -19,7 +18,7 @@ public class ToastUtil {
      * @param message 内容
      */
     public static  void makeText(Context context,String message){
-        ToastUtil.makeText(context,message,0,0,0);
+        makeText(context,message,0,0,0);
     }
 
     /***
@@ -54,15 +53,16 @@ public class ToastUtil {
         if (position!=0){
             toast.setGravity(position,0,0);
         }
-        LinearLayout toastView = (LinearLayout) toast.getView();
-        ImageView bg= new ImageView(BHPApplication.appContext);
+        LinearLayout toastView = new LinearLayout(context);
+        LinearLayout.LayoutParams params =new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity=Gravity.CENTER;
+
+        ImageView bg= new ImageView(context);
         if (resId!=0){
             bg.setImageResource(resId);
         }
-        toastView.addView(toastView);
-        if (duration==0){
-            toast.setDuration(Toast.LENGTH_SHORT);
-        }else {
+        toastView.addView(toastView,params);
+        if (duration!=0){
             toast.setDuration(duration);
         }
         toast.show();
