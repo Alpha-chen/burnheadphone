@@ -4,13 +4,14 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/** 安全、加密相关类 */
+/**
+ * 安全、加密相关类
+ */
 public class SecurityLib {
     /**
      * 进行MD5加密
      *
-     * @param info
-     *            要加密的信息
+     * @param info 要加密的信息
      * @return String 加密后的字符串
      */
     public static String EncryptToMD5(String info) {
@@ -33,8 +34,7 @@ public class SecurityLib {
     /**
      * 进行SHA加密
      *
-     * @param info
-     *            要加密的信息
+     * @param info 要加密的信息
      * @return String 加密后的字符串
      */
     public static String EncryptToSHA(String info) {
@@ -70,8 +70,7 @@ public class SecurityLib {
     /**
      * 将二进制转化为16进制字符串
      *
-     * @param b
-     *            二进制字节数组
+     * @param b 二进制字节数组
      * @return String 转换为大写
      */
     public static String byte2hex(byte[] b) {
@@ -106,23 +105,23 @@ public class SecurityLib {
     /**
      * 将两个ASCII字符合成一个字节； 如："EF"--> 0xEF
      *
-     * @param src0
-     *            byte
-     * @param src1
-     *            byte
+     * @param src0 byte
+     * @param src1 byte
      * @return byte
      */
     public static byte UniteBytes(byte src0, byte src1) {
-        byte _b0 = Byte.decode("0x" + new String(new byte[] { src0 }))
+        byte _b0 = Byte.decode("0x" + new String(new byte[]{src0}))
                 .byteValue();
         _b0 = (byte) (_b0 << 4);
-        byte _b1 = Byte.decode("0x" + new String(new byte[] { src1 }))
+        byte _b1 = Byte.decode("0x" + new String(new byte[]{src1}))
                 .byteValue();
         byte ret = (byte) (_b0 ^ _b1);
         return ret;
     }
 
-    /** 返回路径节点字符串，包括前面的/，包括uid，包括末尾的/，都是大写的 */
+    /**
+     * 返回路径节点字符串，包括前面的/，包括uid，包括末尾的/，都是大写的
+     */
     public static String GetPathNode(int uid, String account) {
         String result = "";
         String mded = EncryptToMD5(uid + "" + account);
@@ -135,7 +134,9 @@ public class SecurityLib {
         return result;
     }
 
-    /** 返回头像路径节点地址，包括UID和前后的/符号 */
+    /**
+     * 返回头像路径节点地址，包括UID和前后的/符号
+     */
     public static String XGetPortraitPath(int uid) {
         String result = "";
         String mded = EncryptToMD5(uid + "");
@@ -148,7 +149,9 @@ public class SecurityLib {
         return result;
     }
 
-    /** 获取头像完整地址 */
+    /**
+     * 获取头像完整地址
+     */
     public static String GetUserIconPath(int uid) {
         String result = XGetPortraitPath(uid);
         return PORTRAIT_URL + result + uid + ".png";
@@ -156,6 +159,5 @@ public class SecurityLib {
 
     public static final String PORTRAIT_URL = "http://icon.burnheadphone.com";
 
-    public static final String attach_url = "v0.api.upyun.com";
 
 }

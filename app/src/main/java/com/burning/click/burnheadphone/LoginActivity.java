@@ -1,9 +1,5 @@
 package com.burning.click.burnheadphone;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -13,6 +9,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
@@ -20,6 +17,7 @@ import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.net.build.LoginBuild;
+import com.burning.click.burnheadphone.util.ProgressUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,12 +30,18 @@ import okhttp3.Response;
 public class LoginActivity extends BaseActivity {
     // UI references.
 
-    @Bind(R.id.email) AutoCompleteTextView mEmailView;
-    @Bind(R.id.password) EditText mPasswordView;
-    @Bind(R.id.login_progress) View mProgressView;
-    @Bind(R.id.login_form) View mLoginFormView;
-    @Bind(R.id.login_sign_in_button) Button mLogin;
-    private  LoginResponseHandler loginResponseHandler;
+    @Bind(R.id.email)
+    AutoCompleteTextView mEmailView;
+    @Bind(R.id.password)
+    EditText mPasswordView;
+    View mProgreddlay;
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+    @Bind(R.id.login_sign_in_button)
+    Button mLogin;
+    private LoginResponseHandler loginResponseHandler;
+    private ProgressBar mProgressView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +61,10 @@ public class LoginActivity extends BaseActivity {
                 super.onSuccess(response);
                 LogUtil.d(TAG, "reponses=" + response.message());
                 if ("OK".equals(response.message())) {
-                myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
+                    myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
                 }
             }
+
             @Override
             public void onFailure(Response response) {
                 super.onFailure(response);
@@ -72,6 +77,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        mProgreddlay = findViewById(R.id.progress);
+        mProgressView = (ProgressBar) mProgreddlay.findViewById(R.id.progress_);
         mLogin.setOnClickListener(this);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -118,9 +125,8 @@ public class LoginActivity extends BaseActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
+            ProgressUtil.showProgress(mProgressView, true);
             LogUtil.d(9999999);
-//            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/"), loginResponseHandler);
             BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
         }
     }
@@ -135,44 +141,13 @@ public class LoginActivity extends BaseActivity {
         return password.length() > 4;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case Constant.WHAT.EMPTY_SUCCESS:
                 LogUtil.d(177);
-                showProgress(true);
+                ProgressUtil.showProgress(mProgressView, false);
                 break;
             default:
                 break;
