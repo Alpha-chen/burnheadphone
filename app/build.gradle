@@ -21,6 +21,12 @@ android {
         }
     }
 
+    sourceSets{
+        main{
+
+            java.srcDirs=['src/main/java','src/main/java-gen']
+        }
+    }
     // 移除lint检查的error
     lintOptions {
         abortOnError false
@@ -41,4 +47,5 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
+    compile 'de.greenrobot:greendao:2.1.0'
 }

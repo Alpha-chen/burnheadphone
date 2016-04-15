@@ -76,6 +76,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     @OnClick(R.id.login_sign_in_button)
+    void sign() {
+        attemptLogin();
+    }
 
     @Override
     protected void initView() {
@@ -151,7 +154,7 @@ public class LoginActivity extends BaseActivity {
             case Constant.WHAT.EMPTY_SUCCESS:
                 LogUtil.d(177);
                 ProgressUtil.showProgress(mProgressView, false);
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -159,7 +162,7 @@ public class LoginActivity extends BaseActivity {
                 userNode.setLogin_status(1);
                 userNode.setPassword(SecurityLib.EncryptToSHA(mPasswordView.getText().toString()));
                 userNode.setEmail(mEmailView.getText().toString());
-                SpUtils.put(LoginActivity.this,SpUtils.BHP_SHARF,SpkeyName.USER_NODE,userNode.toJson());
+                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, userNode.toJson());
                 break;
             default:
                 break;
