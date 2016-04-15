@@ -87,46 +87,30 @@ public class SpUtils {
         return sharedPreferences.getFloat(key, value);
     }
 
-    public static boolean putString(Context context, String storeFile, String key, String value) {
+    public static boolean put(Context context, String storeFile, String key, Object value) {
+        if (null == value) {
+            return false;
+        }
         SharedPreferences sharedPreferences = SpUtils.getSharePreference(context, storeFile);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        // 可以使用apply 当有多个 put的时候，apply只是提交到内存，后续的操作会覆盖
-        return editor.commit();
+        if (value instanceof String) {
+            editor.putString(key, (String) value);
+            return editor.commit();
+        } else if (value instanceof Integer) {
+            editor.putInt(key, (Integer) value);
+            return editor.commit();
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value);
+            return editor.commit();
+        } else if (value instanceof Float) {
+            editor.putFloat(key, (Float) value);
+            return editor.commit();
+        } else if (value instanceof Long) {
+            editor.putLong(key, (Long) value);
+            return editor.commit();
+        }
+        return false;
     }
-
-    public static boolean putInt(Context context, String storeFile, String key, int value) {
-        SharedPreferences sharedPreferences = SpUtils.getSharePreference(context, storeFile);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        // 可以使用apply 当有多个 put的时候，apply只是提交到内存，后续的操作会覆盖
-        return editor.commit();
-    }
-
-    public static boolean putBoolean(Context context, String storeFile, String key, boolean value) {
-        SharedPreferences sharedPreferences = SpUtils.getSharePreference(context, storeFile);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(key, value);
-        // 可以使用apply 当有多个 put的时候，apply只是提交到内存，后续的操作会覆盖
-        return editor.commit();
-    }
-
-    public static boolean putFloat(Context context, String storeFile, String key, float value) {
-        SharedPreferences sharedPreferences = SpUtils.getSharePreference(context, storeFile);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(key, value);
-        // 可以使用apply 当有多个 put的时候，apply只是提交到内存，后续的操作会覆盖
-        return editor.commit();
-    }
-
-    public static boolean putLong(Context context, String storeFile, String key, long value) {
-        SharedPreferences sharedPreferences = SpUtils.getSharePreference(context, storeFile);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(key, value);
-        // 可以使用apply 当有多个 put的时候，apply只是提交到内存，后续的操作会覆盖
-        return editor.commit();
-    }
-
 
     public static boolean remove(Context context, String storeFile, String key) {
         if (TextUtils.isEmpty(storeFile)) {

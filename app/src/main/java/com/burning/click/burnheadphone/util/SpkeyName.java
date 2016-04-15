@@ -9,7 +9,7 @@ public class SpkeyName {
     public static final String PASS_WORD="pass_word";
     public static final String PEOPLE_NODE="people_node";
     public static final String LOGIN_STATUS="login_status"; // 0 未登录，1登陆
-
+    public static final String USER_NODE="user_node"; // 登录用户信息
 
 
 }

@@ -15,13 +15,14 @@ import android.widget.TextView;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
+import com.burning.click.burnheadphone.common.SecurityLib;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.net.build.LoginBuild;
+import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.ProgressUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
-import com.burning.click.burnheadphone.util.ToastUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,8 +40,6 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.password)
     EditText mPasswordView;
     View mProgreddlay;
-    @Bind(R.id.login_form)
-    View mLoginFormView;
     @Bind(R.id.login_sign_in_button)
     Button mLogin;
     private LoginResponseHandler loginResponseHandler;
@@ -156,7 +155,11 @@ public class LoginActivity extends BaseActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
-                SpUtils.putInt(LoginActivity.this,SpUtils.BHP_SHARF, SpkeyName.LOGIN_STATUS,1);// 已经登陆
+                UserNode userNode = new UserNode();
+                userNode.setLogin_status(1);
+                userNode.setPassword(SecurityLib.EncryptToSHA(mPasswordView.getText().toString()));
+                userNode.setEmail(mEmailView.getText().toString());
+                SpUtils.put(LoginActivity.this,SpUtils.BHP_SHARF,SpkeyName.USER_NODE,userNode.toJson());
                 break;
             default:
                 break;

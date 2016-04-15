@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.burning.click.burnheadphone.adapter.MyPagerAdapter;
 import com.burning.click.burnheadphone.common.ImageRes;
+import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.SpkeyName;
 
@@ -44,7 +45,7 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
 
     private void checkStatus() {
         if (!SpUtils.getBoolean(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.IS_FIRST, true)) {
-            if (0 == SpUtils.getInt(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.LOGIN_STATUS, 0)) {
+            if (null!=UserNode.getmUserNode()&&0 == UserNode.getmUserNode().getLogin_status()) {
                 startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
                 finish();
             } else {
@@ -73,7 +74,7 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
-        SpUtils.putBoolean(WelcomeActivity.this,SpUtils.BHP_SHARF,SpkeyName.IS_FIRST,false);
+        SpUtils.put(WelcomeActivity.this,SpUtils.BHP_SHARF,SpkeyName.IS_FIRST,false);
     }
 
     @Override
