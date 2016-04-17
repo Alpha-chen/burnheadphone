@@ -26,7 +26,7 @@ public class BHPGreenDao {
      */
     private static void addEntity(Schema schema) {
         // 一个实体（类）就关联到数据库中的一张表，此处表名为「mpsMedia」（既类名）
-        Entity note = schema.addEntity("mapMedia");
+        Entity note = schema.addEntity("Mp3Media");
         // 你也可以重新给表命名
         // note.setTableName("NODE");
 

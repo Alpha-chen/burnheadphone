@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-/**
+/**  用户信息
  * Created by click on 16-4-15.
  */
 public class UserNode implements Serializable {
