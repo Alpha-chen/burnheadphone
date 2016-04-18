@@ -43,7 +43,7 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
-        <activity android:name=".TestGreenDaoActivity"></activity>
+        <activity android:name=".TestGreenDaoActivity" />
     </application>
 
 </manifest>

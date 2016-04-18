@@ -43,6 +43,9 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
         initView();
     }
 
+    /**
+     * 判断登陆状态
+     */
     private void checkStatus() {
         if (!SpUtils.getBoolean(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.IS_FIRST, true)) {
             if (null!=UserNode.getmUserNode()&&0 == UserNode.getmUserNode().getLogin_status()) {
