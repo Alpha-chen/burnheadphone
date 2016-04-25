@@ -62,14 +62,14 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainViewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
+        mainViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 if (1==position){
                     return  SnsFragment.newInstance("0","0");
                 }
 
-                return new MainFragment();
+                return BurnFragment.newInstance("0","0");
             }
 
             @Override
