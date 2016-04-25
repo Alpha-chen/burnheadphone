@@ -28,7 +28,6 @@ public class MainFragment extends Fragment {
 
 
     public MainFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -75,6 +74,11 @@ public class MainFragment extends Fragment {
             @Override
             public int getCount() {
                 return mainTitleArr.length;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mainTitleArr[position];
             }
         });
         mainTable.setupWithViewPager(mainViewPager);

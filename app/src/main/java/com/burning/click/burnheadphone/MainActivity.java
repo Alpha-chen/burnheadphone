@@ -15,21 +15,23 @@ import android.view.MenuItem;
 import com.burning.click.burnheadphone.fragment.MainFragment;
 import com.burning.click.burnheadphone.fragment.SnsFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -38,10 +40,9 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -65,19 +66,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -88,29 +83,25 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-//            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0","0")).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0","0")).commit();
             getSupportFragmentManager().beginTransaction().hide(SnsFragment.newInstance("0","0")).commit();
+            toolbar.setTitle(getResources().getString(R.string.main_navi_main));
         } else if (id == R.id.nav_gallery) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, SnsFragment.newInstance("0","0")).commit();
             getSupportFragmentManager().beginTransaction().hide(MainFragment.newInstance("0","0")).commit();
+            toolbar.setTitle(getResources().getString(R.string.main_navi_tip));
         } else if (id == R.id.nav_slideshow) {
+            toolbar.setTitle(getResources().getString(R.string.main_navi_recommend_head_phone));
 
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this, TestGreenDaoActivity.class));
-
+            toolbar.setTitle(getResources().getString(R.string.main_navi_setting));
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }

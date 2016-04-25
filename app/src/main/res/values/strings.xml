@@ -29,6 +29,13 @@
         <item>圈子</item>
     </string-array>
 
+    <string name="main_navi_main">首页</string>
+    <string name="main_navi_sns">圈子</string>
+    <string name="main_navi_Communicate">求扩散</string>
+    <string name="main_navi_share">分享</string>
+    <string name="main_navi_setting">设置</string>
+    <string name="main_navi_tip">小知识</string>
+    <string name="main_navi_recommend_head_phone">耳机推荐</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
