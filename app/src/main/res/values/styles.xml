@@ -39,6 +39,4 @@
         <item name="android:background">@drawable/button_selector</item>
     </style>
 
-
-
 </resources>

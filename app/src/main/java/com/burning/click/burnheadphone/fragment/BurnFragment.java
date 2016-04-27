@@ -1,5 +1,6 @@
 package com.burning.click.burnheadphone.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.burning.click.burnheadphone.R;
 
 /**
+ * 煲耳机界面
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link BurnFragment.OnFragmentInteractionListener} interface
@@ -71,4 +73,13 @@ public class BurnFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 }
