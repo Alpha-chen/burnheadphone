@@ -2,28 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/burn_select_burn_mode"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:id="@+id/burn_mode_lay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/burn_select_burn_mode" />
-<Spinner
-    android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:layout_centerInParent="true"
-    android:spinnerMode="dialog"
-    android:background="@color/colorAccent"
-    />
+        android:layout_height="50dp"
+        android:layout_below="@+id/test"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/burn_mode_select"
+            style="@style/text_common_style"
+            android:layout_gravity="center_vertical"
+            android:text="@string/burn_mode_selected" />
+
+        <TextView
+            android:id="@+id/burn_mode_select_text"
+            style="@style/text_common_style"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/ripple_color"
+            android:drawableRight="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+
 
     <Button
+        android:id="@+id/burn_mode_select_btn"
         style="@style/login_btn_style"
-        android:text="@string/start"
-        android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="50dp"
+        android:text="@string/start"
+        android:textColor="@color/white" />
 </RelativeLayout>

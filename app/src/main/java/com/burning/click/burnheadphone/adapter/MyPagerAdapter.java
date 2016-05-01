@@ -7,36 +7,39 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.burning.click.burnheadphone.constant.Constant;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** viewPager
+/**
+ * viewPager
  * Created by click on 16-3-10.
  */
 public class MyPagerAdapter extends PagerAdapter {
-    private Context mContext ;
+    private Context mContext;
     private ViewPager mViewPager;
-    private int [] mGuidePic;
+    private int[] mGuidePic;
 
     private List<View> mView = new ArrayList<>();
-    public MyPagerAdapter(Context context){
+
+    public MyPagerAdapter(Context context) {
         super();
-        this.mContext= context;
+        this.mContext = context;
     }
 
     @Override
     public int getCount() {
-        if (mView==null){
-            return  0;
+        if (mView == null) {
+            return 0;
         }
         return mView.size();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view==object;
+        return view == object;
     }
 
     @Override
@@ -64,16 +67,15 @@ public class MyPagerAdapter extends PagerAdapter {
     public void setmGuidePic(int[] mGuidePic) {
 
         this.mGuidePic = mGuidePic;
-        if (mGuidePic==null){
+        if (mGuidePic == null) {
             return;
         }
-        for (int i = 0; i <mGuidePic.length;i++){
-            SimpleDraweeView imageView =  new SimpleDraweeView(mContext);
-            imageView.setImageURI(Uri.parse("res://com.burning.click.burnheadphone/"+mGuidePic[i]));
+        for (int i = 0; i < mGuidePic.length; i++) {
+            SimpleDraweeView imageView = new SimpleDraweeView(mContext);
+            imageView.setImageURI(Uri.parse(Constant.IMAGE_URI.FRESCO_IMAGE_URI + mGuidePic[i]));
             mView.add(imageView);
         }
     }
-
 
 
     @Override

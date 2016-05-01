@@ -27,4 +27,17 @@ public class LogUtil {
         }
     }
 
+    private static void printErrorLog(String tag,String msg){
+        if (BHPApplication.DEBUG){
+            Log.e(tag,msg);
+        }
+    }
+
+    /**
+     * 错误log
+     * @param msg
+     */
+    public static void e(String msg){
+        printErrorLog("########==",msg);
+    }
 }

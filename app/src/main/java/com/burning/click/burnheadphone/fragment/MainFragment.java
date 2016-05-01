@@ -15,7 +15,9 @@ import com.burning.click.burnheadphone.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
+/**
+ * 主界面
+ */
 public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -24,7 +26,7 @@ public class MainFragment extends Fragment {
     @Bind(R.id.viewPager_content)
     ViewPager mainViewPager;
 
-    private String[] mainTitleArr =null;
+    private String[] mainTitleArr = null;
 
 
     public MainFragment() {
@@ -53,7 +55,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         mainTitleArr = getActivity().getResources().getStringArray(R.array.main_fragment);
         return view;
     }
@@ -64,11 +66,11 @@ public class MainFragment extends Fragment {
         mainViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if (1==position){
-                    return  SnsFragment.newInstance("0","0");
+                if (1 == position) {
+                    return SnsFragment.newInstance("0", "0");
                 }
 
-                return BurnFragment.newInstance("0","0");
+                return BurnFragment.newInstance("0", "0");
             }
 
             @Override

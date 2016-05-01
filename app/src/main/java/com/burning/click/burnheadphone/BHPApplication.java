@@ -4,13 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
-import com.burning.click.burnheadphone.blockCanry.AppBlockCanaryContext;
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.SpkeyName;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.github.moduth.blockcanary.BlockCanary;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,8 +45,9 @@ public class BHPApplication extends Application {
         Fresco.initialize(mApplication);
         // 判断当前是什么模式
         if (DEBUG) {
-            LeakCanary.install(this);
-            BlockCanary.install(this, new AppBlockCanaryContext());
+
+//            LeakCanary.install(this);
+//            BlockCanary.install(this, new AppBlockCanaryContext());
         }
     }
 
