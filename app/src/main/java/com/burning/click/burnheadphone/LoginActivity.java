@@ -17,6 +17,8 @@ import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
 import com.burning.click.burnheadphone.common.SecurityLib;
 import com.burning.click.burnheadphone.constant.Constant;
+import com.burning.click.burnheadphone.net.BHPHttpClient;
+import com.burning.click.burnheadphone.net.build.LoginBuild;
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.ProgressUtil;
@@ -131,7 +133,7 @@ public class LoginActivity extends BaseActivity {
         } else {
             ProgressUtil.showProgress(mProgressView, true);
             LogUtil.d(9999999);
-//            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
+            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
         }
     }
 
@@ -160,7 +162,7 @@ public class LoginActivity extends BaseActivity {
                 userNode.setLogin_status(1);
                 userNode.setPassword(SecurityLib.EncryptToSHA(mPasswordView.getText().toString()));
                 userNode.setEmail(mEmailView.getText().toString());
-                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, userNode.toJson());
+                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, userNode.toJson(userNode));
                 break;
             default:
                 break;

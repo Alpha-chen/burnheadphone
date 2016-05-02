@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
@@ -48,4 +48,5 @@ dependencies {
     compile 'com.github.moduth:blockcanary-ui:1.2.0'
     compile 'de.greenrobot:greendao:2.1.0'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile files('libs/jaudiotagger-2.0.3.jar')
 }

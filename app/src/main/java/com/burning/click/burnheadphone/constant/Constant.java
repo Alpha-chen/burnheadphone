@@ -26,7 +26,16 @@ public interface Constant {
         int MODE_CODE = 3000;
         int ADD_MODE_CODE = MODE_CODE + 1; // 新增模式
         int EDIT_MODE_CODE = ADD_MODE_CODE + 1; // 编辑模式
-        int SELECT_BURN_SONG=EDIT_MODE_CODE+1; // 选择 煲耳机音乐
+        int SELECT_BURN_SONG = EDIT_MODE_CODE + 1; // 选择 煲耳机音乐
+    }
+
+    /**
+     * 扫描本地歌曲列表
+     */
+    interface SEARCH_BURN_SONG_STATUS {
+        int SEARCH_SONG_START = 4000; // K开始扫扫描
+        int SEARCHING_SONG = SEARCH_SONG_START + 1; // 扫描中
+        int SEARCH_SONG_END = SEARCHING_SONG + 1; // 扫描完成
     }
 
     /**

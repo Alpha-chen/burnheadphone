@@ -109,5 +109,7 @@
     <string name="edit_mode_ok">保存</string>
     <string name="ok">确定</string>
     <string name="cancle">取消</string>
+    <string name="load_more">更多</string>
 
+    <string name="no_song">没有查到歌曲</string>
 </resources>

@@ -1,11 +1,14 @@
 package com.burning.click.burnheadphone.node;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
-/**  用户信息
+/**
+ * 用户信息
  * Created by click on 16-4-15.
  */
 public class UserNode implements Serializable {
@@ -79,8 +82,9 @@ public class UserNode implements Serializable {
                 '}';
     }
 
-    public String toJson() {
-        return "{\"uid\"':" + uid + ",\"login_status\":'" + login_status + "',\"password\":'" + password + "\'," + "\"email\":'" + email + "'}";
-
+    public String toJson(UserNode userNode) {
+        if (null == userNode) return null;
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

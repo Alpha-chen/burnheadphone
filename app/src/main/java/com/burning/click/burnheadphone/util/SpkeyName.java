@@ -1,6 +1,7 @@
 package com.burning.click.burnheadphone.util;
 
 /**
+ * SharePreference 变量名称
  * Created by click on 16-4-14.
  */
 public class SpkeyName {

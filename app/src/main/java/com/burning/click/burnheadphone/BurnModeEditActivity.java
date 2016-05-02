@@ -138,6 +138,9 @@ public class BurnModeEditActivity extends BaseActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initView();
+        initIntent();
+        initViewData();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -146,16 +149,17 @@ public class BurnModeEditActivity extends BaseActivity {
     @Override
     protected void initIntent() {
         super.initIntent();
+        burnModeNode = new BurnModeNode();
         if (null == getIntent()) return;
         oldBurnModeNode = (BurnModeNode) getIntent().getSerializableExtra("BurnModeNode");
         if (null == oldBurnModeNode) return;
-        burnModeNode = new BurnModeNode();
         burnModeNode = burnModeNode.copyTo(oldBurnModeNode); // 将老的数据复制给新的node
     }
 
     @Override
     protected void initViewData() {
         super.initViewData();
+        if (null == oldBurnModeNode) return;
         if (!TextUtils.isEmpty(oldBurnModeNode.getName()))
             mode_name_.setText(oldBurnModeNode.getName());
         if (0 != oldBurnModeNode.getSongNodes().getData().size()) {
@@ -215,7 +219,7 @@ public class BurnModeEditActivity extends BaseActivity {
      * 选择煲耳机的音乐
      */
     private void selectBurnSong() {
-        int songsId[] = null;
+        String songsId[] = null;
         Intent intent = new Intent();
         intent.setClass(BurnModeEditActivity.this, SelectBurnSongsActivity.class);
         if (null == oldBurnModeNode) {
@@ -224,12 +228,8 @@ public class BurnModeEditActivity extends BaseActivity {
         }
         // 存在数据的时候传给下一个界面
         if (null != oldBurnModeNode.getSongNodes()) {
-            for (int i = 0; i < oldBurnModeNode.getSongNodes().getData().size(); i++) {
-                songsId[i] = oldBurnModeNode.getSongNodes().getData().get(i).getId();
-            }
+            intent.putExtra("oldSongNodes", oldBurnModeNode.getSongNodes());
         }
-
-        intent.putExtra("songsId", songsId);
         startActivityForResult(intent, Constant.RESULT_CODE.SELECT_BURN_SONG);
     }
 
