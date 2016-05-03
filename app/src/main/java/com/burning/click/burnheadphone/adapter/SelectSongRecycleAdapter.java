@@ -2,10 +2,12 @@ package com.burning.click.burnheadphone.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,12 +26,18 @@ import butterknife.ButterKnife;
 public class SelectSongRecycleAdapter extends RecyclerView.Adapter<SelectSongRecycleAdapter.SelectSongViewHoler> {
     private Context mContext;
     private ArrayList<SongNode> data = new ArrayList<>();
-
+    private OnItemClickListener onItemClickListener;
+    boolean lockState;
+    private SparseBooleanArray checkBoxStatus = new SparseBooleanArray();
 
     public SelectSongRecycleAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        if (null == onItemClickListener) return;
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public void setData(ArrayList<SongNode> data) {
         this.data = data;
@@ -44,11 +52,51 @@ public class SelectSongRecycleAdapter extends RecyclerView.Adapter<SelectSongRec
     }
 
     @Override
-    public void onBindViewHolder(SelectSongViewHoler holder, int position) {
+    public void onBindViewHolder(final SelectSongViewHoler holder, final int position) {
         if (null == data.get(position)) return;
         SongNode songNode = data.get(position);
+        lockState = false;
+
         holder.burn_song_name.setText(songNode.getTitle());
         holder.burn_song_artist.setText(songNode.getSinger());
+        holder.burn_select_song_cb.setTag(position);
+        holder.burn_select_song_cb.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int pos = (int) holder.burn_select_song_cb.getTag();
+                if (lockState) {
+                    lockState = false;
+                    return;
+                }
+                if (isChecked) {
+                    checkBoxStatus.put(pos, true);
+                    onItemClickListener.selectSong(position);
+                } else {
+                    checkBoxStatus.delete(pos);
+                    onItemClickListener.removeSong(position);
+                }
+            }
+        });
+
+        holder.burn_select_song_cb.setChecked(checkBoxStatus.get(position, false));
+        if (1 == data.get(position).getIsSelect()) {
+            lockState = true;
+            holder.burn_select_song_cb.setChecked(true);
+            onItemClickListener.selectSong(position);
+        }
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onItemClickListener(position);
+            }
+        });
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onItemClickListener.onItemLonClickListener(position);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -68,12 +116,23 @@ public class SelectSongRecycleAdapter extends RecyclerView.Adapter<SelectSongRec
         ImageView burn_song_detail;
         @Bind(R.id.burn_select_song_cb)
         CheckBox burn_select_song_cb;
+        private View mView;
 
         public SelectSongViewHoler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.mView = itemView;
         }
     }
 
 
+    public interface OnItemClickListener {
+        void onItemLonClickListener(int position);
+
+        void onItemClickListener(int position);
+
+        void selectSong(int positions);
+
+        void removeSong(int position);
+    }
 }

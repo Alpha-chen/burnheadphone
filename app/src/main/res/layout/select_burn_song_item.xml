@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="60dp">
+    android:layout_height="70dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ripple_color" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginRight="5dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/burn_song_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="@string/action_settings"
             android:textColor="@color/black"
             android:textSize="15sp" />
@@ -23,13 +27,11 @@
             android:id="@+id/burn_song_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
             android:text="@string/action_settings"
             android:textColor="@color/black"
             android:textSize="12sp" />
-
     </LinearLayout>
+
 
     <ImageView
         android:id="@+id/burn_song_detail"
@@ -37,16 +39,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
         android:padding="5dp"
-        android:src="@drawable/ic_more_horiz_black_24dp" />
+        android:src="@drawable/ic_more_horiz_black_24dp"
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/burn_select_song_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        android:visibility="gone" />
+        android:layout_centerVertical="true" />
 </RelativeLayout>

@@ -16,8 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.node.BurnModeNode;
+import com.burning.click.burnheadphone.node.SongNodes;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -165,7 +167,7 @@ public class BurnModeEditActivity extends BaseActivity {
         if (0 != oldBurnModeNode.getSongNodes().getData().size()) {
             burn_mode_image.setVisibility(View.GONE);
             burn_mode_song_size.setVisibility(View.VISIBLE);
-            burn_mode_song_size.setText(oldBurnModeNode.getSongNodes().getData().size());
+            burn_mode_song_size.setText(oldBurnModeNode.getSongNodes().getData().size() + "首");
             hasSongList = true;
         }
         if (0 != oldBurnModeNode.getBurnModeTime()) {
@@ -222,12 +224,17 @@ public class BurnModeEditActivity extends BaseActivity {
         String songsId[] = null;
         Intent intent = new Intent();
         intent.setClass(BurnModeEditActivity.this, SelectBurnSongsActivity.class);
-        if (null == oldBurnModeNode) {
+        if (null == oldBurnModeNode && !hasSongList) {
+            LogUtil.d(228);
             startActivityForResult(intent, Constant.RESULT_CODE.SELECT_BURN_SONG);
             return;
         }
         // 存在数据的时候传给下一个界面
-        if (null != oldBurnModeNode.getSongNodes()) {
+        if (null != burnModeNode.getSongNodes() && hasSongList) {
+            intent.putExtra("oldSongNodes", burnModeNode.getSongNodes());
+            LogUtil.d(235);
+        } else if (null != oldBurnModeNode.getSongNodes()) {
+            LogUtil.d(237);
             intent.putExtra("oldSongNodes", oldBurnModeNode.getSongNodes());
         }
         startActivityForResult(intent, Constant.RESULT_CODE.SELECT_BURN_SONG);
@@ -271,6 +278,13 @@ public class BurnModeEditActivity extends BaseActivity {
         if (null == data) return;
         switch (resultCode) {
             case Constant.RESULT_CODE.SELECT_BURN_SONG:
+                SongNodes songNodes = new SongNodes();
+                songNodes = (SongNodes) data.getSerializableExtra("selectSongNodes");
+                burnModeNode.setSongNodes(songNodes);
+                burn_mode_image.setVisibility(View.GONE);
+                burn_mode_song_size.setVisibility(View.VISIBLE);
+                burn_mode_song_size.setText(burnModeNode.getSongNodes().getData().size() + "首");
+                hasSongList = true;
 
                 break;
             default:

@@ -1,9 +1,14 @@
 package com.burning.click.burnheadphone.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.provider.MediaStore;
 
+import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.node.SongNode;
 
 import org.jaudiotagger.audio.AudioFileIO;
@@ -14,6 +19,7 @@ import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -72,8 +78,7 @@ public class MediaUtils {
             songInfo.setSizeStr(getFileSize(sourceFile.length()));
             songInfo.setFilePath(filePath);
             songInfo.setType(SongNode.LOCALSONG);
-            songInfo.setIslike(SongNode.UNLIKE);
-            songInfo.setDownloadStatus(SongNode.DOWNLOADED);
+             songInfo.setDownloadStatus(SongNode.DOWNLOADED);
             songInfo.setCreateTime(DateUtil.dateToString(new Date()));
 
             mp3file = null;
@@ -91,8 +96,8 @@ public class MediaUtils {
      * @param context
      * @return
      */
-    public static SongNode getSongNodeByFile(Context context) {
-        SongNode songNode = null;
+    public static ArrayList<SongNode> getSongNodeByFile(Context context) {
+        ArrayList<SongNode> songNodes = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{
                         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME,
@@ -105,7 +110,7 @@ public class MediaUtils {
                         "audio/mpeg", "audio/x-ms-wma"}, null);
         if (cursor.moveToFirst()) {
             do {
-                songNode = new SongNode();
+                SongNode songNode = new SongNode();
                 songNode.setSid(cursor.getString(0));
                 songNode.setDisplayName(cursor.getString(1));
                 songNode.setTitle(cursor.getString(2));
@@ -125,17 +130,19 @@ public class MediaUtils {
                 }
                 if (cursor.getString(8) != null) {
                     float size = cursor.getInt(8) / 1024f / 1024f;
-                    songNode.setSid((size + "").substring(0, 4) + "M");
+                    songNode.setSizeStr((size + "").substring(0, 4) + "M");
                 } else {
                     songNode.setSizeStr("未知大小");
                 }
                 if (cursor.getString(9) != null) {
                     songNode.setFilePath(cursor.getString(9));
                 }
+                songNodes.add(songNode);
+                LogUtil.d("aaaa", songNode.toString() + "");
             } while (cursor.moveToNext());
             cursor.close();
-        }
-        return songNode;
+        }////////////////
+        return songNodes;
     }
 
     /**
@@ -152,6 +159,77 @@ public class MediaUtils {
         int second = time % 60;
         minute %= 60;
         return String.format("%02d:%02d", minute, second);
+    }
+
+    private static String where = "mime_type in ('audio/mpeg','audio/x-ms-wma') "; // and bucket_display_name <> 'audio' and is_music > 0
+    private static String sortOrder = MediaStore.Audio.Media.DATA;
+    private static String[] projection = {
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.DISPLAY_NAME,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.SIZE
+    };
+
+    public static SongNode selectAll(final Context context) {
+        if (context == null) { //判断传入的参数的有效性
+            return null;
+        }
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = null;
+        SongNode audio = null;
+        try {
+            //查询数据库，参数分别为（路径，要查询的列名，条件语句，条件参数，排序）
+            cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, where, null, sortOrder);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    audio = new SongNode();
+                    audio.setSid("" + cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID))); //获取唯一id
+                    audio.setFilePath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))); //文件路径
+                    audio.setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))); //文件名
+                    //...   还有很多属性可以设置
+                    //可以通过下一行查看属性名，然后去Audio.Media里寻找对应常量名
+
+                    //获取专辑封面（如果数据量大的话，会很耗时——需要考虑如何开辟子线程加载）
+//                    Bitmap albumArt = createAlbumArt(audio.getFilePath());
+//                    audio.set
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return audio;
+    }
+
+    /**
+     * @param filePath 文件路径，like XXX/XXX/XX.mp3
+     * @return 专辑封面bitmap
+     * @Description 获取专辑封面
+     */
+    public static Bitmap createAlbumArt(final String filePath) {
+        Bitmap bitmap = null;
+        //能够获取多媒体文件元数据的类
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath); //设置数据源
+            byte[] embedPic = retriever.getEmbeddedPicture(); //得到字节型数据
+            bitmap = BitmapFactory.decodeByteArray(embedPic, 0, embedPic.length); //转换为图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                retriever.release();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return bitmap;
     }
 
     /**
