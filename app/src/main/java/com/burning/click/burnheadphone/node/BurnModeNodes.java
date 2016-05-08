@@ -1,5 +1,7 @@
 package com.burning.click.burnheadphone.node;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,5 +19,12 @@ public class BurnModeNodes implements Serializable {
 
     public void setData(ArrayList<BurnModeNode> data) {
         this.data = data;
+    }
+
+
+    public static String toJson(BurnModeNodes burnModeNodes) {
+        if (null == burnModeNodes) return null;
+        Gson gson = new Gson();
+        return gson.toJson(burnModeNodes);
     }
 }

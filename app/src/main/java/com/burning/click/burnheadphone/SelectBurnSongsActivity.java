@@ -9,9 +9,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
@@ -48,6 +50,8 @@ public class SelectBurnSongsActivity extends BaseActivity implements SelectSongR
         selectSong();
     }
 
+    @Bind(R.id.select_burn_empty)
+    TextView select_burn_empty;
     private ArrayList<SongNode> mSongNodes = new ArrayList<>();
     private SongNodes selectSongNodes = new SongNodes();
     private LinearLayoutManager layoutManager;
@@ -103,7 +107,11 @@ public class SelectBurnSongsActivity extends BaseActivity implements SelectSongR
                 ProgressUtil.showProgress(progressBar, false);
                 LogUtil.d("扫描完成");
                 LogUtil.d(TAG, "songNodes.size()=" + oldSongNodes.size());
-
+                if (0 == oldSongNodes.size()) {
+                    select_burn_empty.setVisibility(View.VISIBLE);
+                } else {
+                    select_burn_empty.setVisibility(View.GONE);
+                }
                 break;
             case Constant.SEARCH_BURN_SONG_STATUS.SEARCHING_SONG:
                 LogUtil.d("扫描中");

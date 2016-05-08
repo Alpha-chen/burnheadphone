@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by click on 16-4-30.
  */
 public class BurnModeNode implements Serializable {
-    private String modeImaUrl; // 模式生成图片的位置
+    private String modeImaUrl=""; // 模式生成图片的位置
     private String name; // 模式的名称
     private String id; // 模式的id
     // 模式内歌单列表
@@ -95,9 +95,7 @@ public class BurnModeNode implements Serializable {
 //        if (this.equals(burnModeNode)) return true;
         if (this.burnModeTime != burnModeNode.burnModeTime) {
             return false;
-        } else if (!this.extra.equals(burnModeNode.extra)) {
-            return false;
-        } else if (!this.id.equals(burnModeNode.id)) {
+        }  else if (!this.id.equals(burnModeNode.id)) {
             return false;
         } else if (!this.modeImaUrl.equals(burnModeNode.modeImaUrl)) {
             return false;
@@ -126,7 +124,7 @@ public class BurnModeNode implements Serializable {
         return this;
     }
 
-    public String toJson(BurnModeNode burnModeNode) {
+    public static String toJson(BurnModeNode burnModeNode) {
         if (null == burnModeNode) return null;
         Gson gson = new Gson();
         return gson.toJson(burnModeNode);

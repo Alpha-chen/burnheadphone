@@ -1,7 +1,6 @@
 package com.burning.click.burnheadphone;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -9,7 +8,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,13 +19,13 @@ import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.node.BurnModeNode;
 import com.burning.click.burnheadphone.node.SongNodes;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
+import com.burning.click.burnheadphone.node.UserNode;
+import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.SpkeyName;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -75,13 +74,14 @@ public class BurnModeEditActivity extends BaseActivity {
 
     @OnClick(R.id.burn_mode_time_lay)
     void burn_mode_time_lay() {
-
+        editBurnTime();
     }
+
 
     @Bind(R.id.burn_mode_time_select)
     ImageView burn_mode_time_select;
-    @Bind(R.id.mode_name_time_select)
-    TextView mode_name_time_select;
+    @Bind(R.id.mode_name_time_select_)
+    TextView mode_name_time_select_;
     /**
      * 记录煲耳机时长
      */
@@ -96,10 +96,6 @@ public class BurnModeEditActivity extends BaseActivity {
     @Bind(R.id.burn_mode_record_switch)
     Switch burn_mode_record_switch;
 
-    @OnCheckedChanged(R.id.burn_mode_record_switch)
-    void setBurn_mode_record_switch() {
-
-    }
 
     @Bind(R.id.burn_mode_record_time)
     TextView burn_mode_record_time;
@@ -114,12 +110,22 @@ public class BurnModeEditActivity extends BaseActivity {
     /**
      * 保存
      */
-    @Bind(R.id.edit_mode_save)
-    Button edit_mode_save;
+    @Bind(R.id.edit_burn_mode_ok)
+    ImageView edit_burn_mode_ok;
 
-    @OnClick(R.id.edit_mode_save)
-    void edit_mode_save() {
-
+    @OnClick(R.id.edit_burn_mode_ok)
+    void edit_burn_mode_ok() {
+        Intent intent = new Intent();
+        intent.putExtra("modeStatus", modeStatus);
+        if (!burnModeNode.compareTo(oldBurnModeNode)) {
+            burnModeNode.setId(UserNode.getmUserNode().getUid());
+            intent.putExtra("burnModeNode", burnModeNode);
+        } else {
+            // 不做修改
+            intent.putExtra("burnModeNode", burnModeNode);
+        }
+        setResult(Constant.RESULT_CODE.MODE_CODE, intent);
+        finish();
     }
 
     private EditText edit_mode_name;
@@ -143,9 +149,7 @@ public class BurnModeEditActivity extends BaseActivity {
         initView();
         initIntent();
         initViewData();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     @Override
@@ -153,6 +157,7 @@ public class BurnModeEditActivity extends BaseActivity {
         super.initIntent();
         burnModeNode = new BurnModeNode();
         if (null == getIntent()) return;
+        modeStatus = getIntent().getIntExtra("modeStatus", -1);
         oldBurnModeNode = (BurnModeNode) getIntent().getSerializableExtra("BurnModeNode");
         if (null == oldBurnModeNode) return;
         burnModeNode = burnModeNode.copyTo(oldBurnModeNode); // 将老的数据复制给新的node
@@ -164,16 +169,19 @@ public class BurnModeEditActivity extends BaseActivity {
         if (null == oldBurnModeNode) return;
         if (!TextUtils.isEmpty(oldBurnModeNode.getName()))
             mode_name_.setText(oldBurnModeNode.getName());
-        if (0 != oldBurnModeNode.getSongNodes().getData().size()) {
-            burn_mode_image.setVisibility(View.GONE);
-            burn_mode_song_size.setVisibility(View.VISIBLE);
-            burn_mode_song_size.setText(oldBurnModeNode.getSongNodes().getData().size() + "首");
-            hasSongList = true;
+        if (null != oldBurnModeNode.getSongNodes()) {
+            if (0 != oldBurnModeNode.getSongNodes().getData().size()) {
+                burn_mode_image.setVisibility(View.GONE);
+                burn_mode_song_size.setVisibility(View.VISIBLE);
+                burn_mode_song_size.setText(oldBurnModeNode.getSongNodes().getData().size() + "首");
+                hasSongList = true;
+            }
         }
+
         if (0 != oldBurnModeNode.getBurnModeTime()) {
             burn_mode_time_select.setVisibility(View.GONE);
-            mode_name_time_select.setVisibility(View.VISIBLE);
-            mode_name_time_select.setText(oldBurnModeNode.getBurnModeTime());
+            mode_name_time_select_.setVisibility(View.VISIBLE);
+            mode_name_time_select_.setText(oldBurnModeNode.getBurnModeTime() + "");
         }
         if (1 == oldBurnModeNode.getRecordTimeStatus()) {
             burn_mode_record_switch.setChecked(true);
@@ -193,6 +201,25 @@ public class BurnModeEditActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        burn_mode_record_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SpUtils.put(BurnModeEditActivity.this, SpUtils.BHP_SHARF, SpkeyName.RECORD_BURN_TIME_STATUS, 1);
+                    int burn_time = SpUtils.getInt(BurnModeEditActivity.this, SpUtils.BHP_SHARF, SpkeyName.RECORD_BURN_TIME, 0);
+                    if (0 == burn_time) {
+                        burn_mode_had_burn_time.setVisibility(View.GONE);
+                    } else {
+                        burn_mode_had_burn_time.setVisibility(View.VISIBLE);
+                        burn_mode_had_burn_time_display_txt.setText(getString(burn_time, getResources().getString(R.string.edit_mode_had_burn_time_display)));
+                    }
+                } else {
+                    SpUtils.put(BurnModeEditActivity.this, SpUtils.BHP_SHARF, SpkeyName.RECORD_BURN_TIME_STATUS, 0);
+                    SpUtils.put(BurnModeEditActivity.this, SpUtils.BHP_SHARF, SpkeyName.RECORD_BURN_TIME, 0);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -216,6 +243,21 @@ public class BurnModeEditActivity extends BaseActivity {
         alertDialog = builder.create();
         alertDialog.show();
     }
+
+    /**
+     * 选择煲耳机时间
+     */
+    private void editBurnTime() {
+        Intent intent = new Intent();
+        intent.setClass(BurnModeEditActivity.this, SelectBurnTimeActivity.class);
+        if (null == burnModeNode) {
+            intent.putExtra("burnTime", oldBurnModeNode.getBurnModeTime());
+        } else {
+            intent.putExtra("burnTime", burnModeNode.getBurnModeTime());
+        }
+        startActivityForResult(intent, Constant.RESULT_CODE.SELECT_BURN_SONG_TIME);
+    }
+
 
     /**
      * 选择煲耳机的音乐
@@ -250,22 +292,7 @@ public class BurnModeEditActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "BurnModeEdit Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.burning.click.burnheadphone/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
-
 
     @Override
     protected void onResume() {
@@ -285,7 +312,14 @@ public class BurnModeEditActivity extends BaseActivity {
                 burn_mode_song_size.setVisibility(View.VISIBLE);
                 burn_mode_song_size.setText(burnModeNode.getSongNodes().getData().size() + "首");
                 hasSongList = true;
-
+                break;
+            case Constant.RESULT_CODE.SELECT_BURN_SONG_TIME:
+                burnModeNode.setBurnModeTime(data.getIntExtra("selectBurnTime", 0));
+                if (0 != burnModeNode.getBurnModeTime()) {
+                    burn_mode_time_select.setVisibility(View.GONE);
+                    mode_name_time_select_.setVisibility(View.VISIBLE);
+                    mode_name_time_select_.setText(burnModeNode.getBurnModeTime() + "分钟");
+                }
                 break;
             default:
                 break;
@@ -296,20 +330,7 @@ public class BurnModeEditActivity extends BaseActivity {
     public void onStop() {
         super.onStop();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "BurnModeEdit Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.burning.click.burnheadphone/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+
     }
 
     @Override

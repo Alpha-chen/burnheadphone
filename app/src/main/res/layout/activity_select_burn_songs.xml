@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/select_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="70dp"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -19,7 +19,7 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:text="@string/edit_mode_music"
             android:textColor="@color/white"
-            android:textSize="17sp" />
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/select_burn_song_ok"
@@ -49,4 +49,12 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin" />
 
+    <TextView
+        android:id="@+id/select_burn_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_song"
+        android:textSize="24sp"
+        android:visibility="gone" />
 </RelativeLayout>

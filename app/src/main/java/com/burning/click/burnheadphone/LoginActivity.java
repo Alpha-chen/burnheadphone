@@ -21,6 +21,7 @@ import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.net.build.LoginBuild;
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.IDGenerate;
 import com.burning.click.burnheadphone.util.ProgressUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
 
@@ -160,9 +161,10 @@ public class LoginActivity extends BaseActivity {
                 finish();
                 UserNode userNode = new UserNode();
                 userNode.setLogin_status(1);
+                userNode.setUid(IDGenerate.getId(mEmailView.getText().toString()));
                 userNode.setPassword(SecurityLib.EncryptToSHA(mPasswordView.getText().toString()));
                 userNode.setEmail(mEmailView.getText().toString());
-                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, userNode.toJson(userNode));
+                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, UserNode.toJson(userNode));
                 break;
             default:
                 break;

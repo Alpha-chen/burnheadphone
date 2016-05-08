@@ -103,13 +103,19 @@
     <string name="edit_mode_name_edited">添加模式名称</string>
     <string name="edit_mode_music">选择煲机歌曲</string>
     <string name="edit_mode_time">煲机时长</string>
+    <string name="edit_mode_time_select">选择煲机时长</string>
     <string name="edit_mode_had_burn_time">已经煲机时长</string>
     <string name="edit_mode_had_burn_time_display">%1$d分钟</string>
     <string name="edit_mode_record_time">记录煲机时长</string>
+    <string name="edit_mode">编辑模式</string>
     <string name="edit_mode_ok">保存</string>
     <string name="ok">确定</string>
     <string name="cancle">取消</string>
     <string name="load_more">更多</string>
-
     <string name="no_song">没有查到歌曲</string>
+    <string name="burn_edit_time_30">30分钟</string>
+    <string name="burn_edit_time_60">60分钟</string>
+    <string name="burn_edit_time_180">180分钟</string>
+    <string name="burn_edit_time_never">不要停</string>
+
 </resources>

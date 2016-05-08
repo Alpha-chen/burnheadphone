@@ -21,7 +21,7 @@ public class SongNodes implements Serializable {
         this.data = data;
     }
 
-    public String toJson(SongNodes list) {
+    public static String toJson(SongNodes list) {
         if (null == list) return null;
         Gson gson = new Gson();
         return gson.toJson(list);

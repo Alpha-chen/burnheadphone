@@ -27,7 +27,17 @@ public interface Constant {
         int ADD_MODE_CODE = MODE_CODE + 1; // 新增模式
         int EDIT_MODE_CODE = ADD_MODE_CODE + 1; // 编辑模式
         int SELECT_BURN_SONG = EDIT_MODE_CODE + 1; // 选择 煲耳机音乐
+        int SELECT_BURN_SONG_TIME = SELECT_BURN_SONG + 1; // 选择 煲耳机 时间
+
+
     }
+
+
+    /***
+     * 煲耳机时间
+     */
+    public static int BURN_TIME = 0; //  30 分钟   60  180  999 永远
+
 
     /**
      * 扫描本地歌曲列表
@@ -36,6 +46,16 @@ public interface Constant {
         int SEARCH_SONG_START = 4000; // K开始扫扫描
         int SEARCHING_SONG = SEARCH_SONG_START + 1; // 扫描中
         int SEARCH_SONG_END = SEARCHING_SONG + 1; // 扫描完成
+    }
+
+    /**
+     * 煲耳机界面数据变换
+     */
+
+    interface NOTIFY_MODE_LIST {
+
+        int NOTIFY_MODE_LIST = 4000; // 从 模式编辑界面进入到煲耳机界面
+
     }
 
     /**

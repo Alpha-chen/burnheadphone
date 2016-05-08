@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class UserNode implements Serializable {
 
-    private int uid;
+    private String uid;
     private String password;
     private int login_status; // 0
     private String email;
@@ -26,7 +26,7 @@ public class UserNode implements Serializable {
         if (null == jsonObject) {
             return;
         }
-        this.uid = jsonObject.getInt("uid");
+        this.uid = jsonObject.getString("uid");
         this.password = jsonObject.getString("password");
         this.login_status = jsonObject.getInt("login_status");
         this.email = jsonObject.getString("email");
@@ -46,18 +46,22 @@ public class UserNode implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+        setmUserNode(this);
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
+        setmUserNode(this);
+
     }
 
     public int getLogin_status() {
         return login_status;
+
     }
 
     public String getEmail() {
@@ -66,10 +70,14 @@ public class UserNode implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+        setmUserNode(this);
+
     }
 
     public void setLogin_status(int login_status) {
         this.login_status = login_status;
+        setmUserNode(this);
+
     }
 
     @Override
@@ -82,9 +90,9 @@ public class UserNode implements Serializable {
                 '}';
     }
 
-    public String toJson(UserNode userNode) {
+    public static String toJson(UserNode userNode) {
         if (null == userNode) return null;
         Gson gson = new Gson();
-        return gson.toJson(this);
+        return gson.toJson(userNode);
     }
 }

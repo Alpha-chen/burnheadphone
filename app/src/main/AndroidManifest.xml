@@ -77,13 +77,17 @@
         <activity
             android:name=".SelectBurnSongsActivity"
             android:exported="true"
-            android:theme="@style/Theme.Design.Light.NoActionBar"
-            />
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
 
         <receiver
             android:name=".broadReciver.ScanMediaBroadReceiver"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
+        <activity
+            android:name=".SelectBurnTimeActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+
     </application>
 
 </manifest>

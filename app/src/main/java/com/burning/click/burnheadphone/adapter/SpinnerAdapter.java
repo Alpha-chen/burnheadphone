@@ -1,7 +1,6 @@
 package com.burning.click.burnheadphone.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.burning.click.burnheadphone.R;
-import com.burning.click.burnheadphone.common.ImageRes;
 import com.burning.click.burnheadphone.node.BurnModeNode;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -68,11 +66,11 @@ public class SpinnerAdapter extends BaseAdapter {
             holer = (SpinnerViewHoler) convertView.getTag();
         }
         if (null == data || null == data.get(position)) return convertView;
-        if (position == 0) {
-            holer.modeImg.setBackgroundResource(ImageRes.getAddModePic());
-        } else {
-            holer.modeImg.setImageURI(Uri.parse(data.get(position).getModeImaUrl()));
-        }
+//        if (position == 0) {
+//            holer.modeImg.setBackgroundResource(ImageRes.getAddModePic());
+//        } else {
+////            holer.modeImg.setImageURI(Uri.parse(data.get(position).getModeImaUrl()));
+//        }
         holer.modeName.setText(data.get(position).getName());
         return convertView;
     }

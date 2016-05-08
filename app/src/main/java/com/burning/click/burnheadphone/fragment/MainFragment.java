@@ -1,5 +1,6 @@
 package com.burning.click.burnheadphone.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.burning.click.burnheadphone.BaseFragment;
 import com.burning.click.burnheadphone.R;
 
 import butterknife.Bind;
@@ -18,7 +20,8 @@ import butterknife.ButterKnife;
 /**
  * 主界面
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
+    protected String TAG = "MainFragment";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     @Bind(R.id.tabLayout)
@@ -84,5 +87,11 @@ public class MainFragment extends Fragment {
             }
         });
         mainTable.setupWithViewPager(mainViewPager);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

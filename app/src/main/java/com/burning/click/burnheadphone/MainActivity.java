@@ -7,18 +7,19 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.burning.click.burnheadphone.Log.LogUtil;
+import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.fragment.MainFragment;
 import com.burning.click.burnheadphone.fragment.SnsFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showMainFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0","0")).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0", "0")).commit();
     }
 
     @Override
@@ -85,12 +87,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0","0")).commit();
-            getSupportFragmentManager().beginTransaction().hide(SnsFragment.newInstance("0","0")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0", "0")).commit();
+            getSupportFragmentManager().beginTransaction().hide(SnsFragment.newInstance("0", "0")).commit();
             toolbar.setTitle(getResources().getString(R.string.main_navi_main));
         } else if (id == R.id.nav_gallery) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, SnsFragment.newInstance("0","0")).commit();
-            getSupportFragmentManager().beginTransaction().hide(MainFragment.newInstance("0","0")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, SnsFragment.newInstance("0", "0")).commit();
+            getSupportFragmentManager().beginTransaction().hide(MainFragment.newInstance("0", "0")).commit();
             toolbar.setTitle(getResources().getString(R.string.main_navi_tip));
         } else if (id == R.id.nav_slideshow) {
             toolbar.setTitle(getResources().getString(R.string.main_navi_recommend_head_phone));
@@ -103,5 +105,12 @@ public class MainActivity extends AppCompatActivity
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
     }
 }

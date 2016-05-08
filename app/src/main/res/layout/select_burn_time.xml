@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/burn_time_title"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/edit_mode_time_select"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/select_burn_time_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_time_lay"
+        style="@style/common_ripple_lay"
+        android:layout_marginTop="40dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dip"
+            android:background="@color/line" />
+
+
+        <TextView
+            android:id="@+id/burn_mode_time"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_edit_time_30" />
+
+
+        <TextView
+            android:id="@+id/mode_name_time_select"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/burn_mode_time_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_black_24dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_time_lay1"
+        style="@style/common_ripple_lay">
+
+
+        <TextView
+            android:id="@+id/burn_mode_time1"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_edit_time_60" />
+
+
+        <TextView
+            android:id="@+id/mode_name_time_select1"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/burn_mode_time_select1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_black_24dp"
+
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_time_lay2"
+        style="@style/common_ripple_lay">
+
+
+        <TextView
+            android:id="@+id/burn_mode_time2"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_edit_time_180" />
+
+
+        <TextView
+            android:id="@+id/mode_name_time_select2"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/burn_mode_time_select2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_black_24dp"
+
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_time_lay3"
+        style="@style/common_ripple_lay">
+
+
+        <TextView
+            android:id="@+id/burn_mode_time3"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_edit_time_never" />
+
+
+        <TextView
+            android:id="@+id/mode_name_time_select3"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/burn_mode_time_select3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_black_24dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dip"
+        android:background="@color/line" />
+
+
+</LinearLayout>
