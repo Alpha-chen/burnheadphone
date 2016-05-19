@@ -15,13 +15,15 @@ public class BurnModeNode implements Serializable {
     // 模式内歌单列表
     private SongNodes songNodes;
     // 记录该模式 已经播放 播放时长
-    private int recordTimeStatus; // "0" 表示没有开启时长记录 "1" 表示开启了时长记录
     private int hasBurnTime;
+    private int recordTimeStatus; // "0" 表示没有开启时长记录 "1" 表示开启了时长记录
     // 设置 煲耳机的时长
     private int burnModeTime; // "30" "60" "180" "99999999":不停止 一直煲耳机
     // 扩展
     private String extra; //
 
+    // 播放到第几首歌曲
+    private int playingPosition =0;
     public String getModeImaUrl() {
         return modeImaUrl;
     }
@@ -86,6 +88,14 @@ public class BurnModeNode implements Serializable {
         this.extra = extra;
     }
 
+    public int getPlayingPosition() {
+        return playingPosition;
+    }
+
+    public void setPlayingPosition(int playingPosition) {
+        this.playingPosition = playingPosition;
+    }
+
     public static String DEFAULT_MODE = "{'data':[{'id':'0','modeImaUrl':'','name':'添加新的模式'}," +
             "{'id':'1','modeImaUrl':'','name':'智能模式'}]}";
 
@@ -107,6 +117,8 @@ public class BurnModeNode implements Serializable {
             return false;
         } else if (this.hasBurnTime != burnModeNode.hasBurnTime) {
             return false;
+        }else if (this.playingPosition!=burnModeNode.playingPosition){
+            return false;
         }
         return true;
     }
@@ -121,6 +133,7 @@ public class BurnModeNode implements Serializable {
         this.extra = burnModeNode.extra;
         this.songNodes = burnModeNode.songNodes;
         this.hasBurnTime = burnModeNode.hasBurnTime;
+        this.playingPosition=burnModeNode.playingPosition;
         return this;
     }
 

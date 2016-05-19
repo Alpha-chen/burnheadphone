@@ -46,9 +46,9 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
     /**
      * 判断登陆状态
      */
-    private void checkStatus() {
+    private void checkStatus()  {
         if (!SpUtils.getBoolean(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.IS_FIRST, true)) {
-            if (null!=UserNode.getmUserNode()&&0 == UserNode.getmUserNode().getLogin_status()) {
+            if (null != UserNode.getmUserNode() && 0 == UserNode.getmUserNode().getLogin_status()) {
                 startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
                 finish();
             } else {
@@ -77,7 +77,7 @@ public class WelcomeActivity extends BaseActivity implements OnPageChangeListene
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
-        SpUtils.put(WelcomeActivity.this,SpUtils.BHP_SHARF,SpkeyName.IS_FIRST,false);
+        SpUtils.put(WelcomeActivity.this, SpUtils.BHP_SHARF, SpkeyName.IS_FIRST, false);
     }
 
     @Override

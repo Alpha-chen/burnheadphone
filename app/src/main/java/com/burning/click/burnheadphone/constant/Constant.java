@@ -4,7 +4,6 @@ package com.burning.click.burnheadphone.constant;
  * Created by click on 16-3-22.
  */
 public interface Constant {
-
     interface NET_WHAT {
         int EMPTY_MESSAGE = 1000;
         int SUCCESS_MESSAGE = EMPTY_MESSAGE + 1;
@@ -54,7 +53,7 @@ public interface Constant {
 
     interface NOTIFY_MODE_LIST {
 
-        int NOTIFY_MODE_LIST = 4000; // 从 模式编辑界面进入到煲耳机界面
+        int NOTIFY_MODE_LIST = 5000; // 从 模式编辑界面进入到煲耳机界面
 
     }
 
@@ -63,5 +62,12 @@ public interface Constant {
      */
     interface IMAGE_URI {
         String FRESCO_IMAGE_URI = "res://com.burning.click.burnheadphone/";
+    }
+
+    interface PLAY_AUDIO{
+        int PLAY_AUDIO_START=6000; // 开始播放
+        int PLAY_AUDIO_PLAYING=PLAY_AUDIO_START+1; // 正在播放
+        int PLAY_AUDIO_STOP=PLAY_AUDIO_PLAYING+1; // 播放停止
+        int PLAY_AUDIO_PAUSE=PLAY_AUDIO_STOP+1;
     }
 }

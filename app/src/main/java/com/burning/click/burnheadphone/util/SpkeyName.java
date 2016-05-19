@@ -14,4 +14,10 @@ public class SpkeyName {
 
     public static final String RECORD_BURN_TIME_STATUS = "record_burn_time_status"; // 记录煲耳机 时间状态 0 "开" 1 "关"
     public static final String RECORD_BURN_TIME = "record_burn_time";  // 记录煲耳机时间
+    public static final String SELECT_BURN_MODE_POSITION="select_burn_mode_position"; // 记录煲耳机选取模式的位置
+    public static int HEADSETSTATE =0; // "0" 为插入 "1"插入
+    public static int BURN_STATUS =0; // "0" 没有在煲耳机 "1"正在煲耳机
+
+    public static final  String USER_LIST="user_list"; // 用户列表
+
 }

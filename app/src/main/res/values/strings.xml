@@ -3,6 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">设置</string>
+    <string name="login_out">退出登陆</string>
 
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -10,6 +11,10 @@
     <!--自定义-->
     <string name="start">开始煲吧</string>
     <string name="title_activity_login">登陆</string>
+    <string name="title_activity_login_tip">登陆提示</string>
+    <string name="title_activity_login_tip1">该账户不存在,\n是否使用该账号进行登陆.</string>
+    <string name="title_activity_login_ok">是</string>
+    <string name="title_activity_login_no">否</string>
 
     <!-- Strings related to login -->
     <string name="prompt_user">用户名</string>
@@ -26,7 +31,7 @@
 
     <string-array name="main_fragment">
         <item>首页</item>
-        <item>圈子</item>
+        <!--<item>圈子</item>-->
     </string-array>
 
     <string name="main_navi_main">首页</string>
@@ -37,7 +42,7 @@
     <string name="main_navi_tip">小知识</string>
     <string name="main_navi_recommend_head_phone">耳机推荐</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="burn_select_burn_mode">模式选取</string>
+    <string name="burn_select_burn_mode">当前播放歌曲:</string>
     <string name="burn_mode_selected">当前模式:</string>
     <string name="title_activity_mode">T</string>
 
@@ -118,4 +123,22 @@
     <string name="burn_edit_time_180">180分钟</string>
     <string name="burn_edit_time_never">不要停</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="burn_tip1">什么是煲耳机?</string>
+    <string name="burn_tip2">煲耳机有哪些步骤?</string>
+    <string name="burn_tip3">煲耳机真的有用么?</string>
+    <string name="burn_tip4">煲耳机有哪些注意事项?</string>
+    <string name="burn_tip5">我该选择那种音频煲耳机?</string>
+
+    <string name="burn_tip1_detail1">\u3000\u3000耳机的“煲”实际就是在煲振膜折环，新耳机振膜折环机械顺性差，导致失真比较大，经过一段时间使用后，顺性逐渐变好，失真也会逐渐降到正常的水平。对于耳放，只要不关机就是煲机了，但对于耳机，还必须馈以一定功率的信号使其振膜不停振动。\n\u3000\u3000煲的过程犹如打通七经八脉，未“煲”过或未“煲”够火候儿的耳机，声音的特点可以用“紧、冷、硬、粗”四个字来形容，而“煲”后的产品则醇和、顺滑、细腻很多，仿佛发酵不全的新酒与陈年佳酿相比一般，它们的“味道”还是大不一样的。如果只以正常的聆听方式当然假以时日也能够达到煲后的效果，不过，有步骤、有效率的煲机一方面可大大缩短时间令器材更快进入到最佳状态，另一方面也可以更全面、均衡的将器材或扬声器在全频范围工作热身，以人为比喻，经过一定的身体锻炼以后，再经常运动保持身体在最佳状态，自然工作效率也会大大提高了！</string>
+    <string name="burn_tip1_detail2">\u3000\u3000煲耳机方法是“渐进”，使用软件的"智能煲烫"模式，在刚开始时，用较低音量下让耳机先舒缓，然后用中等音量煲烫；如果这时你听着高音不刺耳了，变得圆润自然，中音温暖亲切，低频再也不是混成一团的轰隆隆，而充满细节，那就恭喜了，OK！</string>
+    <string name="burn_tip1_detail3">\u3000\u3000并不是所有的耳机煲过都会变好声，这要和耳机的本身的质素所决定的，有些耳机煲后的效果并不是很明显，这也是正常的。我们煲机的目的是帮助它迅速度过老化调整期，使其各组成部件的物理特性达到稳定。未煲过的耳机振动系统可能会比较紧、比较硬，通过煲机，可以让它的振动系统松弛下来，参数也趋于稳定，因此音质会变好一点。</string>
+    <string name="burn_tip1_detail4">\u3000\u3000在煲的过程中要注意两点：一是不能连续工作太久！因为音圈存在着电阻，工作久了会发热，搞不好还会烧了音圈！最好是煲烫一段时间停止，等待一段时间然后在继续。二是音量千万不能太大，耳塞振膜是很脆弱的材料，音量大的话，音圈运动的行程也就大，从而剧烈拉动振膜，会造成音圈松，振膜变形甚至撕裂等等。
+调准时只要调到能明显听到的声波或者是说空气的振动就可以，千万不要调到太大、听到振膜在剧烈振动这种情况。小心保护好你的耳机</string>
+    <string name="burn_tip1_detail5">\u3000\u3000在这一步里我们可选择的煲机方法有很多种，我一一例出：\n
+\u3000\u3000①、软件法：使用本软件的“智能模式”，用白噪，粉红噪音来煲；\n
+\u3000\u3000②、收音机法：调到没有信号的地方，其噪音也称为白噪音；\n
+\u3000\u3000③、音乐煲机法：用一些音乐煲烫（只要注意音量不要太大就OK了）。</string>
 </resources>

@@ -2,7 +2,6 @@ package com.burning.click.burnheadphone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,21 +9,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-import com.burning.click.burnheadphone.Log.LogUtil;
-import com.burning.click.burnheadphone.constant.Constant;
+import com.burning.click.burnheadphone.fragment.BurnFragment;
 import com.burning.click.burnheadphone.fragment.MainFragment;
 import com.burning.click.burnheadphone.fragment.SnsFragment;
+import com.burning.click.burnheadphone.fragment.TipFragment;
+import com.burning.click.burnheadphone.node.UserNode;
+import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.SpkeyName;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 主界面
+ */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
@@ -34,13 +38,6 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -53,7 +50,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void showMainFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0", "0")).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, BurnFragment.newInstance("0", "0")).commit();
     }
 
     @Override
@@ -64,6 +61,8 @@ public class MainActivity extends BaseActivity
         } else {
             super.onBackPressed();
         }
+        TextView userName = (TextView) drawer.findViewById(R.id.main_navi_header_nick_name);
+        userName.setText(UserNode.getmUserNode().getEmail());
     }
 
     @Override
@@ -76,9 +75,13 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            UserNode.getmUserNode().setLogin_status(0);
+            SpUtils.put(MainActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, UserNode.toJson(UserNode.getmUserNode()));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,20 +92,18 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_camera) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0", "0")).commit();
             getSupportFragmentManager().beginTransaction().hide(SnsFragment.newInstance("0", "0")).commit();
-            toolbar.setTitle(getResources().getString(R.string.main_navi_main));
+            toolbar.setTitle(getResources().getString(R.string.app_name));
         } else if (id == R.id.nav_gallery) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, SnsFragment.newInstance("0", "0")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, TipFragment.newInstance("0", "0")).commit();
             getSupportFragmentManager().beginTransaction().hide(MainFragment.newInstance("0", "0")).commit();
             toolbar.setTitle(getResources().getString(R.string.main_navi_tip));
-        } else if (id == R.id.nav_slideshow) {
-            toolbar.setTitle(getResources().getString(R.string.main_navi_recommend_head_phone));
-
-        } else if (id == R.id.nav_manage) {
-            startActivity(new Intent(MainActivity.this, TestGreenDaoActivity.class));
-            toolbar.setTitle(getResources().getString(R.string.main_navi_setting));
         } else if (id == R.id.nav_share) {
 
         }
+//        else if (id == R.id.nav_manage) {
+//            startActivity(new Intent(MainActivity.this, TestGreenDaoActivity.class));
+//            toolbar.setTitle(getResources().getString(R.string.main_navi_setting));
+//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -110,7 +111,6 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
     }
 }

@@ -92,8 +92,6 @@ public class SnsFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
 
-
-
     @Override
     public void onRefresh() {
 

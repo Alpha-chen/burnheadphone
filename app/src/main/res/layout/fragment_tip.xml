@@ -1,0 +1,181 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.burning.click.burnheadphone.fragment.TipFragment">
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_tip_lay"
+        style="@style/common_ripple_lay"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/burn_mode_music_name"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_tip1" />
+
+        <ImageView
+            android:id="@+id/burn_mode_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+        <TextView
+            android:id="@+id/burn_mode_song_size"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_tip_lay1"
+        style="@style/common_ripple_lay">
+
+        <TextView
+            android:id="@+id/burn_mode_music_name1"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_tip2" />
+
+        <ImageView
+            android:id="@+id/burn_mode_image1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+        <TextView
+            android:id="@+id/burn_mode_song_size1"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_tip_lay2"
+        style="@style/common_ripple_lay">
+
+        <TextView
+            android:id="@+id/burn_mode_music_name2"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_tip3" />
+
+        <ImageView
+            android:id="@+id/burn_mode_image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+        <TextView
+            android:id="@+id/burn_mode_song_size2"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_tip_lay3"
+        style="@style/common_ripple_lay">
+
+        <TextView
+            android:id="@+id/burn_mode_music_name3"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_tip4" />
+
+        <ImageView
+            android:id="@+id/burn_mode_image3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+        <TextView
+            android:id="@+id/burn_mode_song_size3"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+    <RelativeLayout
+        android:id="@+id/burn_mode_tip_lay4"
+        style="@style/common_ripple_lay">
+
+        <TextView
+            android:id="@+id/burn_mode_music_name4"
+            style="@style/text_common_style"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/burn_tip5" />
+
+        <ImageView
+            android:id="@+id/burn_mode_image4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+        <TextView
+            android:id="@+id/burn_mode_song_size4"
+            style="@style/text_common_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include layout="@layout/line_divider" />
+
+</LinearLayout>

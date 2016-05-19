@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/select_title"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary">
 
         <TextView

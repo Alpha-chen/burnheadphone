@@ -1,10 +1,13 @@
 package com.burning.click.burnheadphone;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
@@ -17,13 +20,12 @@ import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.ResponseHandler.LoginResponseHandler;
 import com.burning.click.burnheadphone.common.SecurityLib;
 import com.burning.click.burnheadphone.constant.Constant;
-import com.burning.click.burnheadphone.net.BHPHttpClient;
-import com.burning.click.burnheadphone.net.build.LoginBuild;
 import com.burning.click.burnheadphone.node.UserNode;
+import com.burning.click.burnheadphone.node.UserNodes;
 import com.burning.click.burnheadphone.sp.SpUtils;
-import com.burning.click.burnheadphone.util.IDGenerate;
 import com.burning.click.burnheadphone.util.ProgressUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
+import com.google.gson.Gson;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +37,7 @@ import okhttp3.Response;
  */
 public class LoginActivity extends BaseActivity {
     // UI references.
-
+    private android.support.v7.app.AlertDialog.Builder builder;
     @Bind(R.id.email)
     AutoCompleteTextView mEmailView;
     @Bind(R.id.password)
@@ -46,6 +48,12 @@ public class LoginActivity extends BaseActivity {
     private LoginResponseHandler loginResponseHandler;
     private ProgressBar mProgressView;
 
+    private UserNodes userList = null;
+    private Button login_ok;
+    private Button login_no;
+    private Dialog dialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +61,6 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         initResponseHandler();
         initView();
-
     }
 
     @Override
@@ -84,6 +91,14 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        String tempJson = SpUtils.getString(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_LIST, "");
+        LogUtil.d(TAG,"tempJson="+tempJson);
+        if (TextUtils.isEmpty(tempJson)) {
+            userList = new UserNodes();
+        } else {
+            Gson gson = new Gson();
+            userList = gson.fromJson(tempJson, UserNodes.class);
+        }
         mProgreddlay = findViewById(R.id.progress);
         mProgressView = (ProgressBar) mProgreddlay.findViewById(R.id.progress_);
         mLogin.setOnClickListener(this);
@@ -98,6 +113,15 @@ public class LoginActivity extends BaseActivity {
             }
         });
         mProgressView.setAlpha(0.5f);
+        builder = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.login_alert, null);
+        login_ok = (Button) view.findViewById(R.id.login_ok);
+        login_no = (Button) view.findViewById(R.id.login_no);
+        login_no.setOnClickListener(this);
+        login_ok.setOnClickListener(this);
+        builder.setView(view);
+        dialog = builder.create();
     }
 
 
@@ -134,17 +158,33 @@ public class LoginActivity extends BaseActivity {
         } else {
             ProgressUtil.showProgress(mProgressView, true);
             LogUtil.d(9999999);
-            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
+            String id = SecurityLib.EncryptToSHA(mEmailView.getText().toString());
+            String pwd = SecurityLib.EncryptToSHA(mPasswordView.getText().toString());
+            LogUtil.d("id="+id);
+            LogUtil.d("pwd="+pwd);
+//            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
+            // 用户登陆的时候进行的校验
+            LogUtil.d(userList.getDatas().size());
+            if (userList.getDatas().size() > 0) {
+                for (int i = 0; i < userList.getDatas().size(); i++) {
+                    LogUtil.d("userList.getDatas().get(i).getUid()="+userList.getDatas().get(i).getUid());
+                    LogUtil.d("userList.getDatas().get(i).getPassword()="+userList.getDatas().get(i).getPassword());
+                    if (userList.getDatas().get(i).getUid().equals(id) && userList.getDatas().get(i).getPassword().equals(pwd)) {
+                        myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
+                        return;
+                    }
+                }
+            }
+            // 没用匹配的用户时候
+            dialog.show();
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -161,10 +201,14 @@ public class LoginActivity extends BaseActivity {
                 finish();
                 UserNode userNode = new UserNode();
                 userNode.setLogin_status(1);
-                userNode.setUid(IDGenerate.getId(mEmailView.getText().toString()));
+                userNode.setUid(SecurityLib.EncryptToSHA(mEmailView.getText().toString()));
                 userNode.setPassword(SecurityLib.EncryptToSHA(mPasswordView.getText().toString()));
                 userNode.setEmail(mEmailView.getText().toString());
+                // 将用户的个人下信息进行保存
                 SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_NODE, UserNode.toJson(userNode));
+                // 保存用户到用户列表中
+                userList.getDatas().add(userNode);
+                SpUtils.put(LoginActivity.this, SpUtils.BHP_SHARF, SpkeyName.USER_LIST, UserNodes.toJson(userList));
                 break;
             default:
                 break;
@@ -178,6 +222,12 @@ public class LoginActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.login_sign_in_button:
                 attemptLogin();
+                break;
+            case R.id.login_ok:
+                myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
+                break;
+            case R.id.login_no:
+                finish();
                 break;
             default:
                 break;
