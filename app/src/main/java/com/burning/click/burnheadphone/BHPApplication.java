@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.FileUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -49,6 +50,7 @@ public class BHPApplication extends Application {
 //            LeakCanary.install(this);
 //            BlockCanary.install(this, new AppBlockCanaryContext());
         }
+        FileUtil.createMyDir();
     }
 
     private void initMode() {

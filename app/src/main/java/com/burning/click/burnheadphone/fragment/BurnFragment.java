@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -28,13 +29,18 @@ import com.burning.click.burnheadphone.broadReciver.HeadsetReceiver;
 import com.burning.click.burnheadphone.callback.OnPlayCompleteListener;
 import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.customview.SkinView;
+import com.burning.click.burnheadphone.net.BHPHttpClient;
 import com.burning.click.burnheadphone.node.BurnModeNode;
 import com.burning.click.burnheadphone.node.BurnModeNodes;
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.service.PlayerService;
 import com.burning.click.burnheadphone.sp.SpUtils;
+import com.burning.click.burnheadphone.util.ApiUtil;
+import com.burning.click.burnheadphone.util.FileUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
 import com.google.gson.Gson;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,7 +49,7 @@ import butterknife.OnClick;
 /**
  * 煲耳机界面
  */
-public class BurnFragment extends BaseFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnPlayCompleteListener {
+public class BurnFragment extends BaseFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnPlayCompleteListener, View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String TAG = "BurnFragment";
@@ -206,6 +212,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        PlayerService.onPlayCompleteListener = this;
         initView();
         initViewData();
     }
@@ -253,6 +260,17 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         }
     }
 
+    public void getMp3Dialog() {
+        builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.get_mo3_dialog, null);
+        view.findViewById(R.id.get_mp3_ok).setOnClickListener(this);
+        view.findViewById(R.id.get_mp3_no).setOnClickListener(this);
+        builder.setView(view);
+        dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public boolean handleMessage(Message msg) {
         if (null == msg) return false;
@@ -294,6 +312,15 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
             this.startActivityForResult(intent, Constant.RESULT_CODE.MODE_CODE);
             SpUtils.put(getActivity(), SpUtils.BHP_SHARF, SpkeyName.SELECT_BURN_MODE_POSITION, position);
         } else {
+            if (1 == position) {
+                String audioPath = FileUtil.app_path + FileUtil.bhp_mp3_file;
+                File file = new File(audioPath);
+                if (file.exists()) {
+
+                } else {
+
+                }
+            }
             mode_select_text.setText(burnModeNodes.getData().get(position).getName());
             editBurnPosition = position;
             changeBurnMode();
@@ -339,5 +366,48 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         String songTitle = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getTitle();
         String singer = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getSinger();
         playing_song.setText(songTitle + "--" + singer);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.get_mp3_ok:
+
+
+                break;
+            case R.id.get_mp3_no:
+                mDialogListView.setSelection(0);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+
+    /**
+     * Created by click on 16-5-21.
+     */
+    public class DownLoadAsync extends AsyncTask {
+
+        @Override
+        protected void onProgressUpdate(Object[] values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            boolean isOk = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.pinkMp3, FileUtil.bhp_mp3_file + FileUtil.pinkMp3);
+            boolean isOk1 = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.whiteMp3, FileUtil.bhp_mp3_file + FileUtil.whiteMp3);
+            if (isOk && isOk1) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+        }
     }
 }

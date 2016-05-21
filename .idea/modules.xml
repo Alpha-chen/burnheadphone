@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BurnHeadPhone.iml" filepath="$PROJECT_DIR$/BurnHeadPhone.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bhpgreendaolib/bhpgreendaolib.iml" filepath="$PROJECT_DIR$/bhpgreendaolib/bhpgreendaolib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" filepath="$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" />
     </modules>
   </component>
 </project>

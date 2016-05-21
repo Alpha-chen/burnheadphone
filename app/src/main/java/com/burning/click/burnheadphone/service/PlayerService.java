@@ -30,7 +30,7 @@ public class PlayerService extends Service implements Runnable,
     private int playingSongNodesPosition = -1; //  播放某一个模式下的第几个歌曲
 
     private int songDuration = -1; //  某一首歌曲的长度
-    private OnPlayCompleteListener onPlayCompleteListener;
+    public static OnPlayCompleteListener onPlayCompleteListener;
 
     public void setOnPlayCompleteListener(OnPlayCompleteListener onPlayCompleteListener) {
         this.onPlayCompleteListener = onPlayCompleteListener;

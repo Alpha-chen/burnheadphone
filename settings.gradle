@@ -1,2 +1,1 @@
-include ':app', ':bhpgreendaolib'
-include ':pullToRefresh'
+include ':app'

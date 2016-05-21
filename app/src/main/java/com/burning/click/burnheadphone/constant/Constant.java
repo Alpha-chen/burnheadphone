@@ -1,6 +1,7 @@
 package com.burning.click.burnheadphone.constant;
 
 /**
+ * 常量
  * Created by click on 16-3-22.
  */
 public interface Constant {

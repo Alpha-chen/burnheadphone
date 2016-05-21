@@ -18,17 +18,20 @@ import java.io.IOException;
  * Created by click on 16-4-30.
  */
 public class FileUtil {
-    private static String sd_card = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static String app_path = File.separator + "bhpDir"; // app 根路径
-    private static String bhp_image_path = File.separator + "image"; // 图片存放路径
-    private static String bhp_common_file = File.separator + "file"; // 文件路径
+    public static String sd_card = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static String app_path = sd_card + File.separator + "bhpDir"; // app 根路径
+    public static String bhp_image_path = File.separator + "image"; // 图片存放路径
+    public static String bhp_common_file = File.separator + "file"; // 文件路径
+    public static String bhp_mp3_file = File.separator + "audioFile"; // mp3路径
+    public static String pinkMp3 = File.separator + "pink.mp3";
+    public static String whiteMp3 = File.separator + "white.mp3";
 
     /**
      * 创建应用的根目录
      */
     public static boolean createMyDir() {
         if (!checkSDStatus()) return false;
-        File myFile = new File(sd_card + app_path);
+        File myFile = new File(app_path);
         if (myFile.exists()) return true;
         try {
             return myFile.createNewFile();
@@ -140,6 +143,19 @@ public class FileUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 获取文件后缀名
+     *
+     * @param filepath
+     * @return 文件的后缀名
+     */
+    public static String getFileName(String filepath) {
+        String fileName = "";
+        if (TextUtils.isEmpty(filepath)) return fileName;
+        String[] arr = filepath.split(File.separator);
+        return arr[arr.length - 1];
     }
 
     /***

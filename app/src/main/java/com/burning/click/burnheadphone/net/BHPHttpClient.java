@@ -6,10 +6,14 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
-import com.burning.click.burnheadphone.constant.Constant;
 import com.burning.click.burnheadphone.ResponseHandler.BaseResponseHandler;
+import com.burning.click.burnheadphone.constant.Constant;
+import com.burning.click.burnheadphone.util.FileUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -29,8 +33,8 @@ import okhttp3.Response;
 public class BHPHttpClient {
 
     private static BHPHttpClient bhpHttpClient;
-    private OkHttpClient okHttpClient;
-    private static ArrayList<Request> httpRequestList= new ArrayList<>();
+    private static OkHttpClient okHttpClient;
+    private static ArrayList<Request> httpRequestList = new ArrayList<>();
     private LinkedList<Runnable> queues;
 
     private Handler myHandler;
@@ -38,10 +42,11 @@ public class BHPHttpClient {
     private ExecutorService mThreadPool;
     private Thread mThread;
     private Semaphore mSemaphorePool;
-    public static BHPHttpClient getInstance(){
-        if (bhpHttpClient==null){
-            synchronized (BHPHttpClient.class){
-                if (bhpHttpClient==null){
+
+    public static BHPHttpClient getInstance() {
+        if (bhpHttpClient == null) {
+            synchronized (BHPHttpClient.class) {
+                if (bhpHttpClient == null) {
                     bhpHttpClient = new BHPHttpClient();
                 }
             }
@@ -49,30 +54,30 @@ public class BHPHttpClient {
         return bhpHttpClient;
     }
 
-    public BHPHttpClient(){
+    public BHPHttpClient() {
         initClient();
     }
 
     private void initClient() {
-        if (null==okHttpClient){
-            okHttpClient =  new OkHttpClient();
+        if (null == okHttpClient) {
+            okHttpClient = new OkHttpClient();
         }
-        myHandler= new Handler(Looper.getMainLooper());
-        queues= new LinkedList<>();
-        // 这个是模仿的
+        myHandler = new Handler(Looper.getMainLooper());
+        queues = new LinkedList<>();
+
         mThreadPool = Executors.newFixedThreadPool(6);
         mSemaphorePool = new Semaphore(6);
-        mThread = new Thread(){
+        mThread = new Thread() {
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
-                myHandler = new Handler(){
+                myHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
                         Runnable runnable = getBHPTask();
-                        if (runnable!=null){
+                        if (runnable != null) {
                             mThreadPool.execute(runnable);
                         }
                     }
@@ -84,19 +89,18 @@ public class BHPHttpClient {
     }
 
     private Runnable getBHPTask() {
-        if (queues==null || queues.size()==0){
+        if (queues == null || queues.size() == 0) {
             return null;
         }
-        try
-        {
-            return  queues.removeFirst();
-        }catch (Exception e){
-            return  null;
+        try {
+            return queues.removeFirst();
+        } catch (Exception e) {
+            return null;
         }
 
     }
 
-    private synchronized void addBHPTask(Runnable runnable){
+    private synchronized void addBHPTask(Runnable runnable) {
         queues.add(runnable);
         myHandler.sendEmptyMessage(0x110);
 
@@ -104,85 +108,128 @@ public class BHPHttpClient {
 
     /**
      * 知情求网络
+     *
      * @param request
      */
-    public void enque(final Request request){
+    public void enque(final Request request) {
 
-        if (request==null){
+        if (request == null) {
             return;
         }
 
-        addBHPTask(buildBHPTask(request,null));
+        addBHPTask(buildBHPTask(request, null));
     }
-    public   void enque(final Request request, final BaseResponseHandler responseHandler){
-        if (request==null){
+
+    public void enque(final Request request, final BaseResponseHandler responseHandler) {
+        if (request == null) {
             return;
         }
-            addBHPTask(buildBHPTask(request,responseHandler));
+        addBHPTask(buildBHPTask(request, responseHandler));
     }
 
     private Runnable buildBHPTask(final Request request, final BaseResponseHandler responseHandler) {
-    return new Runnable() {
-        @Override
-        public void run() {
-            try {
-                mSemaphorePool.acquire();
-                if (request==null&&responseHandler !=null){
-                    responseHandler.sendEmptyMessage(Constant.NET_WHAT.EMPTY_MESSAGE);
-                }
-                httpRequestList.add(request);
-                Response response;
-                LogUtil.d(135);
+        return new Runnable() {
+            @Override
+            public void run() {
                 try {
-                     response = okHttpClient.newCall(request).execute();
-                    if (response==null){
-                        return;
+                    mSemaphorePool.acquire();
+                    if (request == null && responseHandler != null) {
+                        responseHandler.sendEmptyMessage(Constant.NET_WHAT.EMPTY_MESSAGE);
                     }
-                    if (response.cacheControl()==null){
-                        return;
-                    }
-                    if (responseHandler==null){
-                        return;
-                    }
-                    // 先读取缓存
-                    if (response.isSuccessful()&&response.cacheResponse()!=null){
-                        LogUtil.d(11111111);
-                        responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE,response.networkResponse());
-                    }else if (response.isSuccessful()){
-                        LogUtil.d(22222222);
-                            responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE,response.networkResponse());
-                    }else if (!response.isSuccessful()){
-                        if (response.code()==404){
-                            LogUtil.d(404);
-                            responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_404);
-                        }else if (response.code()==408){
-                            LogUtil.d(408);
-                            responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_408);
+                    httpRequestList.add(request);
+                    Response response;
+                    LogUtil.d(135);
+                    try {
+                        response = okHttpClient.newCall(request).execute();
+                        if (response == null) {
+                            return;
+                        }
+                        if (response.cacheControl() == null) {
+                            return;
+                        }
+                        if (responseHandler == null) {
+                            return;
+                        }
+                        // 先读取缓存
+                        if (response.isSuccessful() && response.cacheResponse() != null) {
+                            LogUtil.d(11111111);
+                            responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE, response.networkResponse());
+                        } else if (response.isSuccessful()) {
+                            LogUtil.d(22222222);
+                            responseHandler.sendSuccessMessage(Constant.NET_WHAT.SUCCESS_MESSAGE, response.networkResponse());
+                        } else if (!response.isSuccessful()) {
+                            if (response.code() == 404) {
+                                LogUtil.d(404);
+                                responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_404);
+                            } else if (response.code() == 408) {
+                                LogUtil.d(408);
+                                responseHandler.sendEmptyMessage(Constant.NET_WHAT.ERROR_408);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        if (responseHandler != null) {
+                            responseHandler.sendEmptyMessage(Constant.NET_WHAT.UNKNOW_ERROR);
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    if (responseHandler!=null){
-                        responseHandler.sendEmptyMessage(Constant.NET_WHAT.UNKNOW_ERROR);
-                    }
-                }
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }finally {
-                mSemaphorePool.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    mSemaphorePool.release();
+                }
             }
-        }
-    };
+        };
 
     }
 
-    public void cancle(final Request request){
-        if (request==null){
+    /**
+     * 异步下载文件
+     *
+     * @param url
+     * @param destFileDir 本地文件存储的文件夹
+     */
+    public static boolean _downloadAsyn(final String url, final String destFileDir) {
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+        Response response = null;
+        InputStream is = null;
+        byte[] buf = new byte[2048];
+        int len = 0;
+        FileOutputStream fos = null;
+        try {
+            response = call.execute();
+            is = response.body().byteStream();
+            File file = new File(destFileDir, FileUtil.getFileName(url));
+            fos = new FileOutputStream(file);
+            while ((len = is.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+            return true;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            try {
+                if (is != null) is.close();
+                return true;
+            } catch (IOException e) {
+
+            return false;
+            }
+        }
+
+    }
+
+
+    public void cancle(final Request request) {
+        if (request == null) {
             return;
         }
-        Call call =okHttpClient.newCall(request);
-        if (!call.isCanceled()){
+        Call call = okHttpClient.newCall(request);
+        if (!call.isCanceled()) {
             call.cancel();
         }
     }
@@ -190,14 +237,14 @@ public class BHPHttpClient {
     /**
      * 停止所有的请求
      */
-    public void cancle(){
-        if (null==httpRequestList||httpRequestList.size()==0){
+    public void cancle() {
+        if (null == httpRequestList || httpRequestList.size() == 0) {
             return;
         }
-        int temp =httpRequestList.size();
-        for (int i=0;i<temp;i++){
+        int temp = httpRequestList.size();
+        for (int i = 0; i < temp; i++) {
             Call call = okHttpClient.newCall(httpRequestList.get(i));
-            if (!call.isCanceled()){
+            if (!call.isCanceled()) {
                 call.cancel();
             }
         }
@@ -206,22 +253,22 @@ public class BHPHttpClient {
     /**
      * 自定义构建请求
      */
-    public static Request getRequest(String url, RequestBody requestBody){
-        if (TextUtils.isEmpty(url)||null==requestBody){
+    public static Request getRequest(String url, RequestBody requestBody) {
+        if (TextUtils.isEmpty(url) || null == requestBody) {
             return null;
         }
         return new Request.Builder().url(url).post(requestBody).build();
     }
 
-    public static Request getRequest(String url){
-        if (TextUtils.isEmpty(url)){
+    public static Request getRequest(String url) {
+        if (TextUtils.isEmpty(url)) {
             return null;
         }
         return new Request.Builder().url(url).build();
     }
 
-    public static Request getRequest(String url, CacheControl cacheControl){
-        if (TextUtils.isEmpty(url)||null==cacheControl){
+    public static Request getRequest(String url, CacheControl cacheControl) {
+        if (TextUtils.isEmpty(url) || null == cacheControl) {
             return null;
         }
         return new Request.Builder().url(url).cacheControl(cacheControl).build();

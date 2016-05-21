@@ -45,7 +45,8 @@
     <string name="burn_select_burn_mode">当前播放歌曲:</string>
     <string name="burn_mode_selected">当前模式:</string>
     <string name="title_activity_mode">T</string>
-
+    <string name="get_mp3_file_dialog_tip">未检测到智能模式下的音频文件,\n是否进行下载.</string>
+    <string name="get_mp3_file_dialog">提示</string>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

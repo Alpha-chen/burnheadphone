@@ -164,11 +164,8 @@ public class LoginActivity extends BaseActivity {
             LogUtil.d("pwd="+pwd);
 //            BHPHttpClient.getInstance().enque(LoginBuild.test("http://115.28.39.41/indexs.html"), loginResponseHandler);
             // 用户登陆的时候进行的校验
-            LogUtil.d(userList.getDatas().size());
             if (userList.getDatas().size() > 0) {
                 for (int i = 0; i < userList.getDatas().size(); i++) {
-                    LogUtil.d("userList.getDatas().get(i).getUid()="+userList.getDatas().get(i).getUid());
-                    LogUtil.d("userList.getDatas().get(i).getPassword()="+userList.getDatas().get(i).getPassword());
                     if (userList.getDatas().get(i).getUid().equals(id) && userList.getDatas().get(i).getPassword().equals(pwd)) {
                         myHandler.sendEmptyMessage(Constant.WHAT.EMPTY_SUCCESS);
                         return;
