@@ -10,7 +10,7 @@
         style="@style/text_common_style"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="@string/burn_select_burn_mode" />
+        android:text="@string/burn_mode_list" />
 
     <View
         android:layout_width="match_parent"

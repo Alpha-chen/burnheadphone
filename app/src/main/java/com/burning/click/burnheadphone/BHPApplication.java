@@ -50,7 +50,9 @@ public class BHPApplication extends Application {
 //            LeakCanary.install(this);
 //            BlockCanary.install(this, new AppBlockCanaryContext());
         }
-        FileUtil.createMyDir();
+    if (!FileUtil.createMyDir()){
+            FileUtil.createMyDir();
+    }
     }
 
     private void initMode() {

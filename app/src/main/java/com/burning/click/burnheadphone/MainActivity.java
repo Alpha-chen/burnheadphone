@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.burning.click.burnheadphone.fragment.BurnFragment;
 import com.burning.click.burnheadphone.fragment.MainFragment;
-import com.burning.click.burnheadphone.fragment.SnsFragment;
 import com.burning.click.burnheadphone.fragment.TipFragment;
 import com.burning.click.burnheadphone.node.UserNode;
 import com.burning.click.burnheadphone.sp.SpUtils;
@@ -90,15 +89,15 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, MainFragment.newInstance("0", "0")).commit();
-            getSupportFragmentManager().beginTransaction().hide(SnsFragment.newInstance("0", "0")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, BurnFragment.newInstance("0", "0")).commit();
             toolbar.setTitle(getResources().getString(R.string.app_name));
         } else if (id == R.id.nav_gallery) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, TipFragment.newInstance("0", "0")).commit();
             getSupportFragmentManager().beginTransaction().hide(MainFragment.newInstance("0", "0")).commit();
             toolbar.setTitle(getResources().getString(R.string.main_navi_tip));
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent(MainActivity.this, AboutMeActivity.class);
+            startActivity(intent);
         }
 //        else if (id == R.id.nav_manage) {
 //            startActivity(new Intent(MainActivity.this, TestGreenDaoActivity.class));

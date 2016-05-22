@@ -78,7 +78,7 @@ public class MediaUtils {
             songInfo.setSizeStr(getFileSize(sourceFile.length()));
             songInfo.setFilePath(filePath);
             songInfo.setType(SongNode.LOCALSONG);
-             songInfo.setDownloadStatus(SongNode.DOWNLOADED);
+            songInfo.setDownloadStatus(SongNode.DOWNLOADED);
             songInfo.setCreateTime(DateUtil.dateToString(new Date()));
 
             mp3file = null;
@@ -89,6 +89,7 @@ public class MediaUtils {
         return songInfo;
 
     }
+
 
     /**
      * 获取音频文件

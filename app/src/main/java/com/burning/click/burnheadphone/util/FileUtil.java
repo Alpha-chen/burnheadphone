@@ -32,19 +32,14 @@ public class FileUtil {
     public static boolean createMyDir() {
         if (!checkSDStatus()) return false;
         File myFile = new File(app_path);
-        if (myFile.exists()) return true;
-        try {
-            return myFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+//        if (myFile.exists()&&myFile.isDirectory()) return true;
+            return myFile.mkdirs();
     }
 
     /**
      * 创建指定的目录
      */
-    public boolean createFile(String path) {
+    public static boolean createFile(String path) {
         if (!checkSDStatus())
             return false;
         if (TextUtils.isEmpty(path))

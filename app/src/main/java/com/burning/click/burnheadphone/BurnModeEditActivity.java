@@ -8,12 +8,14 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.burning.click.burnheadphone.Log.LogUtil;
 import com.burning.click.burnheadphone.constant.Constant;
@@ -115,6 +117,10 @@ public class BurnModeEditActivity extends BaseActivity {
 
     @OnClick(R.id.edit_burn_mode_ok)
     void edit_burn_mode_ok() {
+        if (TextUtils.isEmpty(burnModeNode.getName()) || null == burnModeNode.getSongNodes() || 0 == burnModeNode.getBurnModeTime()) {
+            Toast.makeText(BurnModeEditActivity.this, "相应的选项选择之后才能保存", Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent();
         intent.putExtra("modeStatus", modeStatus);
         if (!burnModeNode.compareTo(oldBurnModeNode)) {
@@ -128,7 +134,14 @@ public class BurnModeEditActivity extends BaseActivity {
         finish();
     }
 
+    @Bind(R.id.delete_burn_mode_button)
+    Button delete_burn_mode_button;
     private EditText edit_mode_name;
+
+    @OnClick(R.id.delete_burn_mode_button)
+    void delete_burn_mode_button() {
+        deleteBurnMode();
+    }
 
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
@@ -245,6 +258,22 @@ public class BurnModeEditActivity extends BaseActivity {
     }
 
     /**
+     * 提示是否删除该模式
+     */
+    private void deleteBurnMode() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.delete_burn_mode, null);
+        Button ok = (Button) view.findViewById(R.id.delete_mp3_ok);
+        Button cancle = (Button) view.findViewById(R.id.delete_mp3_no);
+        cancle.setOnClickListener(this);
+        ok.setOnClickListener(this);
+        builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
      * 选择煲耳机时间
      */
     private void editBurnTime() {
@@ -350,6 +379,12 @@ public class BurnModeEditActivity extends BaseActivity {
                 alertDialog.dismiss();
                 mode_name_.setText(mode_name);
                 burnModeNode.setName(mode_name);
+                break;
+            case R.id.delete_mp3_ok:
+
+                break;
+            case R.id.delete_mp3_no:
+
                 break;
             default:
                 break;

@@ -65,10 +65,17 @@ public interface Constant {
         String FRESCO_IMAGE_URI = "res://com.burning.click.burnheadphone/";
     }
 
-    interface PLAY_AUDIO{
-        int PLAY_AUDIO_START=6000; // 开始播放
-        int PLAY_AUDIO_PLAYING=PLAY_AUDIO_START+1; // 正在播放
-        int PLAY_AUDIO_STOP=PLAY_AUDIO_PLAYING+1; // 播放停止
-        int PLAY_AUDIO_PAUSE=PLAY_AUDIO_STOP+1;
+    interface PLAY_AUDIO {
+        int PLAY_AUDIO_START = 6000; // 开始播放
+        int PLAY_AUDIO_PLAYING = PLAY_AUDIO_START + 1; // 正在播放
+        int PLAY_AUDIO_STOP = PLAY_AUDIO_PLAYING + 1; // 播放停止
+        int PLAY_AUDIO_PAUSE = PLAY_AUDIO_STOP + 1;
+    }
+
+    /**
+     * 下载音乐完成
+     */
+    interface DOWNLOAD_MUSIC {
+        int SUCCESS = 7000;
     }
 }

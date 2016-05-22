@@ -217,6 +217,17 @@
             </RelativeLayout>
 
             <include layout="@layout/line_divider" />
+
+            <Button
+                android:id="@+id/delete_burn_mode_button"
+                style="@style/login_btn_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/delete_burn_mode"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 

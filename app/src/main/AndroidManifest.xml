@@ -94,6 +94,9 @@
         <activity
             android:name=".TipDetailActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity
+            android:name=".AboutMeActivity"
+            android:label="@string/main_navi_about" />
     </application>
 
 </manifest>

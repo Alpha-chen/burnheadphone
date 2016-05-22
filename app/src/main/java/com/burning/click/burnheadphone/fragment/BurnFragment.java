@@ -1,12 +1,15 @@
 package com.burning.click.burnheadphone.fragment;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
+import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -41,6 +44,7 @@ import com.burning.click.burnheadphone.util.SpkeyName;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -88,10 +92,16 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
     private int maxProgress;
 
     private View view; // layout的 view
+    HeadsetReceiver headsetReceiver;
+    private boolean isRobot = true; //  是否是智能模式
 
     public BurnFragment() {
         // Required empty public constructor
     }
+
+    private boolean isPlaying = true;
+    @Bind(R.id.burn_mode_stop_btn)
+    Button burn_mode_stop_btn;
 
     /**
      * Use this factory method to create a new instance of
@@ -119,22 +129,65 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         }
     }
 
+    /**
+     * 播放歌曲前的动作
+     */
     private void check() {
         if (0 == SpkeyName.HEADSETSTATE) {
             Toast.makeText(getActivity(), "耳机未插入,无法进行煲耳机", Toast.LENGTH_SHORT).show();
             return;
         }
-        String songTitle = burnModeNodes.getData().get(editBurnPosition).getSongNodes().getData().get(0).getTitle();
-        String singer = burnModeNodes.getData().get(editBurnPosition).getSongNodes().getData().get(0).getSinger();
+        if (isRobot) {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(FileUtil.app_path + FileUtil.bhp_mp3_file + FileUtil.pinkMp3);
+                mediaPlayer.prepare();
+                maxProgress = (mediaPlayer.getDuration() / 1000) * 3600;
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(FileUtil.app_path + FileUtil.bhp_mp3_file + FileUtil.whiteMp3);
+                mediaPlayer.prepare();
+                maxProgress += (mediaPlayer.getDuration() / 1000) * 3600;
+                mSinkView.setMaxProgress(maxProgress);
+                SpUtils.put(getActivity(), SpUtils.BHP_SHARF, SpkeyName.ROBOT_BURN_TIME, maxProgress);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            playing_song.setText(FileUtil.pinkMp3);
+            playMusicsRobot(Constant.PLAY_AUDIO.PLAY_AUDIO_START);
+            SpkeyName.BURN_STATUS = 1;
+        } else {
+            String songTitle = burnModeNodes.getData().get(editBurnPosition).getSongNodes().getData().get(0).getTitle();
+            String singer = burnModeNodes.getData().get(editBurnPosition).getSongNodes().getData().get(0).getSinger();
+            playing_song.setText(songTitle + "--" + singer);
+            playMusics(Constant.PLAY_AUDIO.PLAY_AUDIO_START);
+            SpkeyName.BURN_STATUS = 1;
+        }
 
-        playing_song.setText(songTitle + "--" + singer);
-        playMusics(Constant.PLAY_AUDIO.PLAY_AUDIO_START);
-        myHandler.sendEmptyMessageDelayed(PROGRESS, 1000);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(200);
+                    if (null != mBinderService) {
+                        isPlaying = mBinderService.isPlaying();
+                        LogUtil.d("164", isPlaying + "");
+                    }
+                    myHandler.sendEmptyMessageDelayed(PROGRESS, 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
         if (SpkeyName.BURN_STATUS == 1) {
             mode_select_btn.setBackgroundColor(R.color.black_overlay);
             mode_select_btn.setClickable(false);
         }
+        burn_mode_stop_btn.setVisibility(View.VISIBLE);
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -169,11 +222,12 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         dialog = builder.create();
 
         // 注册广播
-        //给广播绑定响应的过滤器
+        //给广播绑定响应的过滤器 检测耳机的状态
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.HEADSET_PLUG");
-        HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+        headsetReceiver = new HeadsetReceiver();
         getActivity().registerReceiver(headsetReceiver, intentFilter);
+        burn_mode_stop_btn.setOnClickListener(this);
     }
 
     @OnClick(R.id.burn_mode_select_text)
@@ -217,10 +271,6 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         initViewData();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -260,6 +310,9 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         }
     }
 
+    /**
+     * 弹出下载对话框
+     */
     public void getMp3Dialog() {
         builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -269,6 +322,12 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         builder.setView(view);
         dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(headsetReceiver);
     }
 
     @Override
@@ -285,10 +344,29 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
                     break;
                 }
                 progress++;
-                if (progress <= maxProgress) {
-                    mSinkView.setCurrentProgress(progress);
-                    myHandler.sendEmptyMessageDelayed(PROGRESS, 100);
+                if (!isPlaying) {
+                    if (isRobot) {
+                        SpUtils.put(getActivity(), SpUtils.BHP_SHARF, SpkeyName.ROBOT_HAS_BURN_TIME, progress);
+                    } else {
+                        burnModeNodes.getData().get(editBurnPosition).setHasBurnTime(progress);
+                    }
+                } else {
+                    if (progress <= maxProgress) {
+                        mSinkView.setCurrentProgress(progress);
+                        myHandler.sendEmptyMessageDelayed(PROGRESS, 100);
+                    } else {
+                        if (null != mBinderService) {
+                            try {
+                                mBinderService.stop();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
+                break;
+            case Constant.DOWNLOAD_MUSIC.SUCCESS:
+                LogUtil.d(298);
                 break;
             default:
                 break;
@@ -313,17 +391,27 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
             SpUtils.put(getActivity(), SpUtils.BHP_SHARF, SpkeyName.SELECT_BURN_MODE_POSITION, position);
         } else {
             if (1 == position) {
+                if (mBinderService != null && mBinderService.isPlaying()) {
+                    Toast.makeText(getActivity(), "正在播放,停止播放音乐之后,才能切换模式.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 String audioPath = FileUtil.app_path + FileUtil.bhp_mp3_file;
                 File file = new File(audioPath);
                 if (file.exists()) {
-
+                    LogUtil.d(319);
+                    mSinkView.setCurrentProgress(SpUtils.getInt(getActivity(), SpUtils.BHP_SHARF, SpkeyName.ROBOT_HAS_BURN_TIME, -1));
+                    mSinkView.invalidate();
+                    isRobot = true;
                 } else {
-
+                    file.mkdirs();
+                    getMp3Dialog();
                 }
+            } else {
+                isRobot = false;
+                editBurnPosition = position;
+                changeBurnMode();
             }
             mode_select_text.setText(burnModeNodes.getData().get(position).getName());
-            editBurnPosition = position;
-            changeBurnMode();
         }
         dialog.dismiss();
     }
@@ -350,40 +438,83 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         intent.putExtra("selectModePosition", editBurnPosition);
         intent.setClass(getActivity(), PlayerService.class);
         getActivity().startService(intent);
+        getActivity().bindService(intent, connection, getActivity().BIND_AUTO_CREATE);
     }
+
+    public void playMusicsRobot(int action) {
+        Intent intent = new Intent();
+        intent.putExtra("MSG", action);
+        intent.putExtra("isRobot", isRobot);
+        intent.setClass(getActivity(), PlayerService.class);
+        getActivity().startService(intent);
+        getActivity().bindService(intent, connection, getActivity().BIND_AUTO_CREATE);
+    }
+
+    /* 通过Binder，实现Activity与Service通信 */
+    private PlayerService.ServiceBinder mBinderService;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBinderService = (PlayerService.ServiceBinder) service;
+        }
+    };
 
     /**
      * 模式切换的时候更新数据源
      */
     public void changeBurnMode() {
-        maxProgress = burnModeNodes.getData().get(editBurnPosition).getBurnModeTime() * 3600;
-        mSinkView.setMaxProgress(maxProgress);
-        mSinkView.setCurrentProgress(burnModeNodes.getData().get(editBurnPosition).getHasBurnTime() * 3600);
+        if (mBinderService != null && mBinderService.isPlaying()) {
+            Toast.makeText(getActivity(), "正在播放,停止播放音乐之后,才能切换模式.", Toast.LENGTH_LONG).show();
+        } else {
+            maxProgress = burnModeNodes.getData().get(editBurnPosition).getBurnModeTime() * 3600;
+            mSinkView.setMaxProgress(maxProgress);
+            mSinkView.setCurrentProgress(burnModeNodes.getData().get(editBurnPosition).getHasBurnTime());
+        }
     }
 
     @Override
     public void onSongComplete(int selectModePosition, int songPosition) {
-        String songTitle = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getTitle();
-        String singer = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getSinger();
-        playing_song.setText(songTitle + "--" + singer);
+        if (selectModePosition == -1 && songPosition == -1) {
+            playing_song.setText(FileUtil.whiteMp3);
+        } else {
+            String songTitle = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getTitle();
+            String singer = burnModeNodes.getData().get(selectModePosition).getSongNodes().getData().get(songPosition).getSinger();
+            playing_song.setText(songTitle + "--" + singer);
+
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_mp3_ok:
-
-
+                DownLoadAsync downLoadAsync = new DownLoadAsync();
+                downLoadAsync.execute();
+                dialog.dismiss();
                 break;
             case R.id.get_mp3_no:
                 mDialogListView.setSelection(0);
+                dialog.dismiss();
+                break;
+            case R.id.burn_mode_stop_btn:
+                try {
+                    mBinderService.stop();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mode_select_btn.setBackground(getResources().getDrawable(R.drawable.button_selector));
+                mode_select_btn.setClickable(true);
+                burn_mode_stop_btn.setVisibility(View.GONE);
+                isPlaying = mBinderService.isPlaying();
                 break;
             default:
                 break;
-
         }
     }
-
 
     /**
      * Created by click on 16-5-21.
@@ -397,8 +528,8 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
 
         @Override
         protected Object doInBackground(Object[] params) {
-            boolean isOk = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.pinkMp3, FileUtil.bhp_mp3_file + FileUtil.pinkMp3);
-            boolean isOk1 = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.whiteMp3, FileUtil.bhp_mp3_file + FileUtil.whiteMp3);
+            boolean isOk = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.pinkMp3, FileUtil.app_path + FileUtil.bhp_mp3_file);
+            boolean isOk1 = BHPHttpClient.getInstance()._downloadAsyn(ApiUtil.BHP_MUSIC_URL + FileUtil.whiteMp3, FileUtil.app_path + FileUtil.bhp_mp3_file);
             if (isOk && isOk1) {
                 return true;
             }
@@ -408,6 +539,11 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
+            boolean temp = (boolean) o;
+            if (temp == true) {
+                Toast.makeText(getActivity(), "下载好了", Toast.LENGTH_LONG).show();
+                myHandler.sendEmptyMessage(Constant.DOWNLOAD_MUSIC.SUCCESS);
+            }
         }
     }
 }

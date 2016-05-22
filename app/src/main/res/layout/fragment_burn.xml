@@ -65,7 +65,7 @@
             android:id="@+id/playing_song"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/burn_select_burn_mode"
+            android:text="@string/burn_select_burn_mode_tip"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="17sp" />
 
@@ -79,4 +79,15 @@
         android:layout_marginTop="20dp"
         android:text="@string/start"
         android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/burn_mode_stop_btn"
+        style="@style/login_btn_style"
+        android:layout_below="@id/burn_mode_select_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/stop"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
 </RelativeLayout>

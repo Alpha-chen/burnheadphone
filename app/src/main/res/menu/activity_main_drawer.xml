@@ -10,18 +10,18 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/main_navi_tip" />
-         <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="@string/main_navi_setting" />-->
+        <!--<item-->
+        <!--android:id="@+id/nav_manage"-->
+        <!--android:icon="@drawable/ic_menu_manage"-->
+        <!--android:title="@string/main_navi_setting" />-->
     </group>
 
     <item android:title="@string/main_navi_Communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/main_navi_share" />
+                android:icon="@drawable/ic_person_black_24dp"
+                android:title="@string/main_navi_about" />
 
         </menu>
     </item>

@@ -10,6 +10,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <!--自定义-->
     <string name="start">开始煲吧</string>
+    <string name="stop">停止播放</string>
     <string name="title_activity_login">登陆</string>
     <string name="title_activity_login_tip">登陆提示</string>
     <string name="title_activity_login_tip1">该账户不存在,\n是否使用该账号进行登陆.</string>
@@ -29,6 +30,7 @@
         completions."
     </string>
 
+    <string name="delete_burn_mode">删除</string>
     <string-array name="main_fragment">
         <item>首页</item>
         <!--<item>圈子</item>-->
@@ -38,14 +40,18 @@
     <string name="main_navi_sns">圈子</string>
     <string name="main_navi_Communicate">求扩散</string>
     <string name="main_navi_share">分享</string>
+    <string name="main_navi_about">关于我</string>
     <string name="main_navi_setting">设置</string>
     <string name="main_navi_tip">小知识</string>
     <string name="main_navi_recommend_head_phone">耳机推荐</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="burn_select_burn_mode">当前播放歌曲:</string>
+    <string name="burn_select_burn_mode_tip">显示当前播放歌曲</string>
     <string name="burn_mode_selected">当前模式:</string>
+    <string name="burn_mode_list">煲耳机模式:</string>
     <string name="title_activity_mode">T</string>
     <string name="get_mp3_file_dialog_tip">未检测到智能模式下的音频文件,\n是否进行下载.</string>
+    <string name="delete_burn_mode_dialog_tip">是否删除该模式</string>
     <string name="get_mp3_file_dialog">提示</string>
     <!-- Strings related to Settings -->
 
@@ -142,4 +148,15 @@
 \u3000\u3000①、软件法：使用本软件的“智能模式”，用白噪，粉红噪音来煲；\n
 \u3000\u3000②、收音机法：调到没有信号的地方，其噪音也称为白噪音；\n
 \u3000\u3000③、音乐煲机法：用一些音乐煲烫（只要注意音量不要太大就OK了）。</string>
+
+    <string name="developer">开发者:</string>
+    <string name="developer_">徐盘根</string>
+    <string name="zhidao">指导老师:</string>
+    <string name="zhidao_">段鹏松讲师</string>
+    <string name="project_site">项目地址:</string>
+    <string name="project_site_">https://github.com/Alpha-chen/burnheadphone</string>
+    <string name="contact">联系邮箱:</string>
+    <string name="contact_">xpg@alphathink.org</string>
+    <string name="version">版本号:</string>
+    <string name="version_">1.0.1</string>
 </resources>

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by click on 16-4-30.
  */
 public class BurnModeNode implements Serializable {
-    private String modeImaUrl=""; // 模式生成图片的位置
+    private String modeImaUrl = ""; // 模式生成图片的位置
     private String name; // 模式的名称
     private String id; // 模式的id
     // 模式内歌单列表
@@ -18,12 +18,13 @@ public class BurnModeNode implements Serializable {
     private int hasBurnTime;
     private int recordTimeStatus; // "0" 表示没有开启时长记录 "1" 表示开启了时长记录
     // 设置 煲耳机的时长
-    private int burnModeTime; // "30" "60" "180" "99999999":不停止 一直煲耳机
+    private int burnModeTime = 0; // "30" "60" "180" "99999999":不停止 一直煲耳机
     // 扩展
     private String extra; //
 
     // 播放到第几首歌曲
-    private int playingPosition =0;
+    private int playingPosition = 0;
+
     public String getModeImaUrl() {
         return modeImaUrl;
     }
@@ -105,7 +106,7 @@ public class BurnModeNode implements Serializable {
 //        if (this.equals(burnModeNode)) return true;
         if (this.burnModeTime != burnModeNode.burnModeTime) {
             return false;
-        }  else if (!this.id.equals(burnModeNode.id)) {
+        } else if (!this.id.equals(burnModeNode.id)) {
             return false;
         } else if (!this.modeImaUrl.equals(burnModeNode.modeImaUrl)) {
             return false;
@@ -117,7 +118,7 @@ public class BurnModeNode implements Serializable {
             return false;
         } else if (this.hasBurnTime != burnModeNode.hasBurnTime) {
             return false;
-        }else if (this.playingPosition!=burnModeNode.playingPosition){
+        } else if (this.playingPosition != burnModeNode.playingPosition) {
             return false;
         }
         return true;
@@ -133,7 +134,7 @@ public class BurnModeNode implements Serializable {
         this.extra = burnModeNode.extra;
         this.songNodes = burnModeNode.songNodes;
         this.hasBurnTime = burnModeNode.hasBurnTime;
-        this.playingPosition=burnModeNode.playingPosition;
+        this.playingPosition = burnModeNode.playingPosition;
         return this;
     }
 
