@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ import com.burning.click.burnheadphone.service.PlayerService;
 import com.burning.click.burnheadphone.sp.SpUtils;
 import com.burning.click.burnheadphone.util.ApiUtil;
 import com.burning.click.burnheadphone.util.FileUtil;
+import com.burning.click.burnheadphone.util.ProgressUtil;
 import com.burning.click.burnheadphone.util.SpkeyName;
 import com.google.gson.Gson;
 
@@ -69,12 +71,15 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
     SpinnerAdapter spinnerAdapter;
     private BurnModeNodes burnModeNodes = null;
     private android.support.v7.app.AlertDialog.Builder builder;
-    private Dialog dialog;
+    private Dialog dialog1;
+    private Dialog dialog2;
     // dialog 中的view
     private ListView mDialogListView;
     private TextView mTitle;
 
-    private ProgressBar progressBar;
+    @Bind(R.id.down_mp3)
+    public ProgressBar progressBar;
+
 
     public int editBurnPosition = -1; // 点击 已有的mode的界面
     @Bind(R.id.burning_progress)
@@ -94,6 +99,9 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
     private View view; // layout的 view
     HeadsetReceiver headsetReceiver;
     private boolean isRobot = true; //  是否是智能模式
+
+    @Bind(R.id.select_burn_mode_arrow_down)
+    public ImageView select_burn_mode_arrow_down;
 
     public BurnFragment() {
         // Required empty public constructor
@@ -219,7 +227,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         mDialogListView.setOnItemLongClickListener(this);
         mTitle = (TextView) view.findViewById(R.id.burn_mode_select_title);
         builder.setView(view);
-        dialog = builder.create();
+        dialog1 = builder.create();
 
         // 注册广播
         //给广播绑定响应的过滤器 检测耳机的状态
@@ -232,7 +240,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @OnClick(R.id.burn_mode_select_text)
     void onModeSelect() {
-        dialog.show();
+        dialog1.show();
     }
 
     @Override
@@ -320,8 +328,8 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         view.findViewById(R.id.get_mp3_ok).setOnClickListener(this);
         view.findViewById(R.id.get_mp3_no).setOnClickListener(this);
         builder.setView(view);
-        dialog = builder.create();
-        dialog.show();
+        dialog2 = builder.create();
+        dialog2.show();
     }
 
     @Override
@@ -381,7 +389,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         if (0 == position) {
             if (burnModeNodes.getData().size() > 4) {
                 Toast.makeText(getActivity(), "最多只能添加四种模式", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
+                dialog1.dismiss();
                 return;
             }
             Intent intent = new Intent();
@@ -397,7 +405,8 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
                 String audioPath = FileUtil.app_path + FileUtil.bhp_mp3_file;
                 File file = new File(audioPath);
-                if (file.exists()) {
+                File file1 = new File(audioPath + FileUtil.pinkMp3);
+                if (file.exists() && file1.exists()) {
                     LogUtil.d(319);
                     mSinkView.setCurrentProgress(SpUtils.getInt(getActivity(), SpUtils.BHP_SHARF, SpkeyName.ROBOT_HAS_BURN_TIME, -1));
                     mSinkView.invalidate();
@@ -413,7 +422,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
             }
             mode_select_text.setText(burnModeNodes.getData().get(position).getName());
         }
-        dialog.dismiss();
+        dialog1.dismiss();
     }
 
     @Override
@@ -427,7 +436,7 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         intent.putExtra("BurnModeNode", burnModeNodes.getData().get(position));
         this.startActivityForResult(intent, Constant.RESULT_CODE.MODE_CODE);
         editBurnPosition = position;
-        dialog.dismiss();
+        dialog1.dismiss();
         return true;
     }
 
@@ -493,12 +502,13 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (v.getId()) {
             case R.id.get_mp3_ok:
                 DownLoadAsync downLoadAsync = new DownLoadAsync();
+
                 downLoadAsync.execute();
-                dialog.dismiss();
+                dialog2.dismiss();
                 break;
             case R.id.get_mp3_no:
                 mDialogListView.setSelection(0);
-                dialog.dismiss();
+                dialog2.dismiss();
                 break;
             case R.id.burn_mode_stop_btn:
                 try {
@@ -522,6 +532,13 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
     public class DownLoadAsync extends AsyncTask {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ProgressUtil.showProgress(progressBar, true);
+            select_burn_mode_arrow_down.setVisibility(View.GONE);
+        }
+
+        @Override
         protected void onProgressUpdate(Object[] values) {
             super.onProgressUpdate(values);
         }
@@ -543,6 +560,8 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
             if (temp == true) {
                 Toast.makeText(getActivity(), "下载好了", Toast.LENGTH_LONG).show();
                 myHandler.sendEmptyMessage(Constant.DOWNLOAD_MUSIC.SUCCESS);
+                ProgressUtil.showProgress(progressBar, false);
+                select_burn_mode_arrow_down.setVisibility(View.VISIBLE);
             }
         }
     }

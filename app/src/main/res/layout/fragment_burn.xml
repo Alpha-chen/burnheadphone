@@ -28,10 +28,23 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@color/ripple_color"
-            android:drawableRight="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:gravity="center"
             android:textColor="@color/colorPrimary" />
+        <ImageView
+            android:id="@+id/select_burn_mode_arrow_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+            />
+        <ProgressBar
+            android:id="@+id/down_mp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
 
+            />
     </LinearLayout>
 
     <com.burning.click.burnheadphone.customview.SkinView
