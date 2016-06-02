@@ -562,6 +562,9 @@ public class BurnFragment extends BaseFragment implements AdapterView.OnItemClic
                 myHandler.sendEmptyMessage(Constant.DOWNLOAD_MUSIC.SUCCESS);
                 ProgressUtil.showProgress(progressBar, false);
                 select_burn_mode_arrow_down.setVisibility(View.VISIBLE);
+            }else{
+                Toast.makeText(getActivity(), "出现了问题", Toast.LENGTH_LONG).show();
+
             }
         }
     }
